@@ -2,6 +2,11 @@
 
 A travel-booking SPA with a Node.js/Express backend, Prisma ORM (SQLite → PostgreSQL), JWT auth, and server-computed booking totals.
 
+## Live Demo
+
+🚀 **Live Frontend:** [https://tripzy-gm79uib89-shreya-singhs-projects-702a36c1.vercel.app](https://tripzy-gm79uib89-shreya-singhs-projects-702a36c1.vercel.app)  
+⚙️ **Live Backend API:** [https://tripzy-1-ga91.onrender.com](https://tripzy-1-ga91.onrender.com/api/health)
+
 ## Team Members
 
 - **Shreya Singh Chauhan**
