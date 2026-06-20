@@ -9,227 +9,255 @@
   <link rel="stylesheet" href="styles.css">
   <script src="https://unpkg.com/feather-icons"></script>
   <style>
-    /* Single Page Application Styles */
-    .page {
-      display: none;
-      opacity: 0;
-      animation: fadeIn 0.5s ease forwards;
-    }
-    
-    .page.active {
-      display: block;
-    }
-    
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    /* Confirmation page specific styles */
-    .confirmation-hero {
+    /* ── SPA page transitions ── */
+    .page { display: none; opacity: 0; animation: fadeIn 0.5s ease forwards; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Loading & error states ── */
+    .loading-state, .error-state {
       text-align: center;
-      padding: 3rem 2rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: var(--radius);
-      margin-bottom: 2rem;
-      color: white;
+      padding: 3rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
     }
-    
-    .confirmation-hero h1,
-    .confirmation-hero p {
-      color: white !important;
-    }
-    
-    .confirmation-icon {
-      width: 80px;
-      height: 80px;
-      background: white;
+    .error-state { color: #e03131; }
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,.5);
+      border-top-color: #fff;
       border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .spinner-dark {
+      border-color: rgba(0,0,0,.15);
+      border-top-color: var(--btn-primary);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Auth tabs ── */
+    .auth-tabs {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-    }
-    
-    .confirmation-icon i {
-      width: 50px;
-      height: 50px;
-      color: #51cf66;
-    }
-    
-    .summary-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow-card);
-    }
-    
-    .summary-header {
-      font-size: 1.5rem;
-      color: var(--text-primary);
+      border-bottom: 2px solid var(--border-color);
       margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--btn-primary);
+      gap: 0;
     }
-    
-    .summary-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
-    }
-    
-    .summary-item:last-child {
-      border-bottom: none;
-    }
-    
-    .summary-label {
+    .auth-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: .75rem 1rem;
+      font-size: .95rem;
       font-weight: 500;
       color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all .2s ease;
     }
-    
-    .summary-value {
-      font-weight: 600;
-      color: var(--text-primary);
+    .auth-tab.active {
+      color: var(--btn-primary);
+      border-bottom-color: var(--btn-primary);
     }
-    
-    .cta-section {
-      text-align: center;
-      padding: 3rem 0;
+    .auth-form { display: block; }
+    .auth-form.hidden { display: none; }
+
+    /* ── Confirmation page ── */
+    .confirmation-hero {
+      text-align: center; padding: 3rem 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: var(--radius); margin-bottom: 2rem; color: white;
     }
-    
-    .cta-section h2 {
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
+    .confirmation-hero h1, .confirmation-hero p { color: white !important; }
+    .confirmation-icon {
+      width: 80px; height: 80px; background: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;
     }
-    
-    .cta-section p {
-      color: var(--text-secondary);
-      margin-bottom: 2rem;
+    .confirmation-icon i { width: 50px; height: 50px; color: #51cf66; }
+    .summary-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius); padding: 2rem; margin-bottom: 2rem;
+      box-shadow: var(--shadow-card);
     }
-    
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
+    .summary-header {
+      font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1.5rem;
+      padding-bottom: 1rem; border-bottom: 2px solid var(--btn-primary);
+    }
+    .summary-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .75rem 0; border-bottom: 1px solid var(--border-color);
+    }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-label { font-weight: 500; color: var(--text-secondary); }
+    .summary-value { font-weight: 600; color: var(--text-primary); }
+    .cta-section { text-align: center; padding: 3rem 0; }
+    .cta-section h2 { color: var(--text-primary); margin-bottom: .5rem; }
+    .cta-section p  { color: var(--text-secondary); margin-bottom: 2rem; }
+    .social-links { display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+
+    /* ── Password toggle ── */
+    .password-wrapper { position: relative; }
+    .password-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-secondary);
+      display: flex; align-items: center; padding: 4px;
     }
   </style>
 </head>
 <body>
-  
-  <!-- Page 1: Registration -->
+
+  <!-- ══════════════════════════════════════════════════════════════
+       PAGE 1: Auth (Register / Login)
+  ══════════════════════════════════════════════════════════════ -->
   <div id="page-registration" class="page active">
     <div class="page-wrapper">
       <div class="container">
-        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0;">
-          <div class="card" style="max-width: 500px; width: 100%; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);">
+        <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 0;">
+          <div class="card" style="max-width:500px;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.1);">
+
             <div class="text-center mb-4">
-              <h1 style="margin-bottom: 0.5rem; font-size: 2.5rem;">🌍</h1>
-              <h2 style="margin-bottom: 0.5rem; color: var(--text-primary);">Tripzy</h2>
-              <p style="color: var(--text-secondary);">Begin your journey with us</p>
+              <h1 style="margin-bottom:.5rem;font-size:2.5rem;">🌍</h1>
+              <h2 style="margin-bottom:.5rem;color:var(--text-primary);">Tripzy</h2>
+              <p style="color:var(--text-secondary);">Begin your journey with us</p>
             </div>
 
-            <form id="registrationForm" novalidate>
-              <!-- Phone Number Field -->
+            <!-- Tabs -->
+            <div class="auth-tabs">
+              <button class="auth-tab active" data-tab="register">Register</button>
+              <button class="auth-tab" data-tab="login">Login</button>
+            </div>
+
+            <!-- Register form -->
+            <form id="registrationForm" class="auth-form" novalidate>
               <div class="form-group">
-                <label for="phone" class="form-label">Phone Number</label>
+                <label for="reg-name" class="form-label">Full Name</label>
                 <div class="input-wrapper">
-                  <div class="input-icon">
-                    <i data-feather="phone"></i>
-                  </div>
-                  <input 
-                    type="tel" 
-                    id="phone" 
-                    name="phone"
-                    class="form-control" 
-                    placeholder="Enter 10-digit phone number"
-                    maxlength="10"
-                    required
-                    autocomplete="tel"
-                  >
+                  <div class="input-icon"><i data-feather="user"></i></div>
+                  <input type="text" id="reg-name" class="form-control" placeholder="Enter your full name" required autocomplete="name">
                 </div>
               </div>
-
-              <!-- PIN Code Field -->
               <div class="form-group">
-                <label for="pin" class="form-label">PIN Code</label>
+                <label for="reg-phone" class="form-label">Phone Number</label>
                 <div class="input-wrapper">
-                  <div class="input-icon">
-                    <i data-feather="key"></i>
-                  </div>
-                  <input 
-                    type="password" 
-                    id="pin" 
-                    name="pin"
-                    class="form-control" 
-                    placeholder="Enter 6-digit PIN"
-                    maxlength="6"
-                    required
-                    autocomplete="new-password"
-                  >
+                  <div class="input-icon"><i data-feather="phone"></i></div>
+                  <input type="tel" id="reg-phone" class="form-control" placeholder="Enter 10-digit phone number" maxlength="10" required autocomplete="tel">
                 </div>
               </div>
-
-              <!-- Email Field -->
               <div class="form-group">
-                <label for="email" class="form-label">Email Address</label>
+                <label for="reg-pincode" class="form-label">PIN Code <span style="font-size:.8rem;color:var(--text-secondary);">(Postal)</span></label>
                 <div class="input-wrapper">
-                  <div class="input-icon">
-                    <i data-feather="mail"></i>
-                  </div>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email"
-                    class="form-control" 
-                    placeholder="Enter your email address"
-                    required
-                    autocomplete="email"
-                  >
+                  <div class="input-icon"><i data-feather="map-pin"></i></div>
+                  <input type="text" id="reg-pincode" class="form-control" placeholder="6-digit postal PIN code" maxlength="6" required autocomplete="postal-code">
                 </div>
               </div>
-
-              <!-- Submit Button -->
-              <button type="submit" class="btn btn-primary btn-block mt-4">
-                Register Now
-              </button>
+              <div class="form-group">
+                <label for="reg-email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                  <div class="input-icon"><i data-feather="mail"></i></div>
+                  <input type="email" id="reg-email" class="form-control" placeholder="Enter your email address" required autocomplete="email">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="reg-password" class="form-label">Password</label>
+                <div class="input-wrapper password-wrapper">
+                  <div class="input-icon"><i data-feather="lock"></i></div>
+                  <input type="password" id="reg-password" class="form-control" placeholder="Min 8 chars, 1 uppercase, 1 digit" required autocomplete="new-password">
+                  <button type="button" class="password-toggle" data-target="reg-password" aria-label="Toggle password visibility">
+                    <i data-feather="eye"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="submit" id="regSubmitBtn" class="btn btn-primary btn-block mt-4">Register Now</button>
+              <div id="reg-error" style="display:none;margin-top:1rem;color:#e03131;text-align:center;font-size:.9rem;"></div>
             </form>
 
-            <div class="text-center mt-4">
-              <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                Already have an account? 
-                <a href="#blog" onclick="navigateTo('blog')" style="color: var(--btn-primary); text-decoration: none;">
-                  Explore Destinations
-                </a>
-              </p>
+            <!-- Login form -->
+            <form id="loginForm" class="auth-form hidden" novalidate>
+              <div class="form-group">
+                <label for="login-email" class="form-label">Email Address</label>
+                <div class="input-wrapper">
+                  <div class="input-icon"><i data-feather="mail"></i></div>
+                  <input type="email" id="login-email" class="form-control" placeholder="Enter your email address" required autocomplete="email">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="login-password" class="form-label">Password</label>
+                <div class="input-wrapper password-wrapper">
+                  <div class="input-icon"><i data-feather="lock"></i></div>
+                  <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required autocomplete="current-password">
+                  <button type="button" class="password-toggle" data-target="login-password" aria-label="Toggle password visibility">
+                    <i data-feather="eye"></i>
+                  </button>
+                </div>
+              </div>
+              <button type="submit" id="loginSubmitBtn" class="btn btn-primary btn-block mt-4">Login</button>
+              <div id="login-error" style="display:none;margin-top:1rem;color:#e03131;text-align:center;font-size:.9rem;"></div>
+              <div style="text-align:center;margin-top:1rem;">
+                <button type="button" id="showForgotBtn" style="background:none;border:none;color:var(--btn-primary);font-size:.9rem;cursor:pointer;text-decoration:underline;">
+                  Forgot password?
+                </button>
+              </div>
+            </form>
+
+            <!-- ── Forgot Password Flow (hidden by default) ── -->
+            <div id="forgotFlow" style="display:none;">
+              <!-- Step 1: request a code -->
+              <div id="forgot-step1">
+                <h3 style="margin-bottom:1.25rem;font-size:1.2rem;">Reset Your Password</h3>
+                <div class="form-group">
+                  <label for="forgot-email" class="form-label">Email Address</label>
+                  <div class="input-wrapper">
+                    <div class="input-icon"><i data-feather="mail"></i></div>
+                    <input type="email" id="forgot-email" class="form-control" placeholder="your@email.com" autocomplete="email">
+                  </div>
+                </div>
+                <div id="forgot-error" style="display:none;color:#e03131;font-size:.88rem;margin-bottom:.75rem;"></div>
+                <button type="button" id="forgotRequestBtn" class="btn btn-primary btn-block">Send Reset Code</button>
+                <div id="forgot-dev-notice" style="display:none;margin-top:1rem;padding:1rem;background:#fff9db;border:1px solid #ffe066;border-radius:8px;font-size:.85rem;color:#6a5c00;">
+                  <strong>Dev mode:</strong> Your reset code is <span id="forgot-dev-token" style="font-family:monospace;font-size:1rem;font-weight:700;letter-spacing:.1em;"></span>
+                </div>
+              </div>
+
+              <!-- Step 2: enter code + new password -->
+              <div id="forgot-step2" style="display:none;">
+                <h3 style="margin-bottom:1.25rem;font-size:1.2rem;">Enter Reset Code</h3>
+                <div class="form-group">
+                  <label for="reset-token" class="form-label">Reset Code</label>
+                  <div class="input-wrapper">
+                    <div class="input-icon"><i data-feather="hash"></i></div>
+                    <input type="text" id="reset-token" class="form-control" placeholder="e.g. A1B2C3D4E5F6" autocomplete="off" style="font-family:monospace;letter-spacing:.1em;text-transform:uppercase;">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="reset-new-password" class="form-label">New Password</label>
+                  <div class="input-wrapper password-wrapper">
+                    <div class="input-icon"><i data-feather="lock"></i></div>
+                    <input type="password" id="reset-new-password" class="form-control" placeholder="Min 8 chars, 1 uppercase, 1 digit" autocomplete="new-password">
+                    <button type="button" class="password-toggle" data-target="reset-new-password" aria-label="Toggle password visibility">
+                      <i data-feather="eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div id="reset-error" style="display:none;color:#e03131;font-size:.88rem;margin-bottom:.75rem;"></div>
+                <button type="button" id="resetSubmitBtn" class="btn btn-primary btn-block">Reset Password</button>
+              </div>
+
+              <div style="text-align:center;margin-top:1.25rem;">
+                <button type="button" id="backToLoginBtn" style="background:none;border:none;color:var(--text-secondary);font-size:.88rem;cursor:pointer;">
+                  ← Back to login
+                </button>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
@@ -237,843 +265,6 @@
             <h3>Tripzy</h3>
             <p>Your gateway to unforgettable travel experiences around the world.</p>
           </div>
-          
-          <div class="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a href="#registration" onclick="navigateTo('registration')">Home</a></li>
-              <li><a href="#blog" onclick="navigateTo('blog')">Destinations</a></li>
-              <li><a href="#itinerary" onclick="navigateTo('itinerary')">Plan Trip</a></li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Support</h3>
-            <ul>
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Connect With Us</h3>
-            <div class="footer-social">
-              <a href="#" class="social-icon" aria-label="Facebook">
-                <i data-feather="facebook"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Instagram">
-                <i data-feather="instagram"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Twitter">
-                <i data-feather="twitter"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="YouTube">
-                <i data-feather="youtube"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="footer-bottom">
-          <p>&copy; 2025 Tripzy. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  </div>
-
-  <!-- Page 2: Blog -->
-  <div id="page-blog" class="page">
-    <style>
-      /* Blog-specific styles */
-      .blog-hero {
-        background: url('assets/Hero_bg.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        padding: 6rem 2rem;
-        min-height: 500px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 0;
-      }
-
-      .blog-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.45);
-      }
-
-      .blog-hero-content {
-        position: relative;
-        z-index: 1;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      .blog-hero h1 {
-        font-size: 3.5rem;
-        margin-bottom: 1rem;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        color: #ffffff;
-      }
-
-      .blog-hero p {
-        font-size: 1.2rem;
-        color: rgba(255, 255, 255, 0.95);
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-      }
-
-      .blog-nav {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border-color);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .blog-nav-content {
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        padding: 1rem 0;
-        gap: 2rem;
-      }
-
-      .blog-nav-links {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-        grid-column: 2;
-      }
-
-      .plan-trip-btn {
-        background: var(--btn-primary);
-        color: #ffffff !important;
-        text-decoration: none;
-        padding: 0.625rem 1.5rem;
-        border-radius: 6px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        white-space: nowrap;
-        grid-column: 3;
-        cursor: pointer;
-        border: none;
-      }
-
-      .blog-nav-link {
-        color: var(--text-secondary);
-        text-decoration: none;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-        position: relative;
-        cursor: pointer;
-      }
-
-      .blog-nav-link:hover, .plan-trip-btn:hover {
-        color: var(--btn-primary);
-        background: #e7f3ff;
-      }
-
-      .plan-trip-btn:hover {
-        background: var(--btn-primary-hover);
-        color: #ffffff !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3);
-      }
-
-      .hamburger-menu {
-        display: none;
-        flex-direction: column;
-        gap: 4px;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.5rem;
-        z-index: 101;
-      }
-
-      .hamburger-menu span {
-        width: 25px;
-        height: 3px;
-        background: var(--text-primary);
-        border-radius: 3px;
-        transition: all 0.3s ease;
-      }
-
-      .hamburger-menu.active span:nth-child(1) {
-        transform: rotate(45deg) translate(7px, 7px);
-      }
-
-      .hamburger-menu.active span:nth-child(2) {
-        opacity: 0;
-      }
-
-      .hamburger-menu.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
-      }
-
-      .destination-section {
-        padding: 4rem 2rem;
-        background: var(--bg-primary);
-      }
-
-      .destination-section:nth-child(even) {
-        background: #ffffff;
-      }
-
-      .destination-card {
-        max-width: 1000px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: var(--radius);
-        padding: 2rem;
-        box-shadow: var(--shadow-card);
-        border: 1px solid var(--border-color);
-      }
-
-      .destination-section:nth-child(even) .destination-card {
-        background: var(--bg-primary);
-      }
-
-      .destination-section:nth-child(even) .destination-card .destination-title {
-        color: #0d0d0d;
-      }
-
-      .destination-section:nth-child(even) .destination-card .destination-description {
-        color: #3a3a3a;
-      }
-
-      .destination-content {
-        max-width: 900px;
-        margin: 0 auto;
-      }
-
-      .destination-title {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: var(--text-primary);
-      }
-
-      .destination-description {
-        font-size: 1rem;
-        line-height: 1.8;
-        color: var(--text-secondary);
-        margin-bottom: 1.5rem;
-      }
-
-      .destination-info-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--border-color);
-      }
-
-      .cta-section {
-        text-align: center;
-        padding: 4rem 2rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: var(--radius);
-        color: white;
-        margin: 3rem 0;
-      }
-
-      .cta-section h2 {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: white;
-      }
-
-      .cta-section p {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        color: rgba(255, 255, 255, 0.95);
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .cta-section .btn {
-        background: white;
-        color: var(--btn-primary);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .cta-section .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        color: var(--btn-primary);
-      }
-
-      .info-block h3 {
-        font-size: 1rem;
-        color: var(--text-primary);
-        margin-bottom: 0.75rem;
-        font-weight: 600;
-      }
-
-      .info-block ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .info-block li {
-        padding: 0.5rem 0;
-        color: var(--text-secondary);
-        font-size: 0.95rem;
-      }
-
-      .info-block li::before {
-        content: "• ";
-        color: var(--btn-primary);
-        font-weight: bold;
-        display: inline-block;
-        width: 1em;
-        margin-left: -1em;
-      }
-
-      @media (max-width: 768px) {
-        .blog-hero { padding: 3rem 1.5rem; }
-        .blog-hero h1 { font-size: 2rem; }
-        .blog-hero p { font-size: 1rem; }
-        
-        .hamburger-menu {
-          display: flex;
-        }
-        
-        .blog-nav-content {
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-          gap: 0.5rem;
-          padding: 0.75rem 1rem;
-          position: relative;
-        }
-        
-        .blog-nav-links {
-          flex-direction: column;
-          gap: 0;
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.3s ease;
-          order: 2;
-        }
-        
-        .blog-nav-links.active {
-          max-height: 300px;
-          padding-top: 1rem;
-        }
-        
-        .blog-nav-link {
-          font-size: 0.9rem;
-          padding: 0.75rem 1rem;
-          text-align: center;
-          border-bottom: 1px solid var(--border-color);
-        }
-        
-        .blog-nav-link:last-child {
-          border-bottom: none;
-        }
-        
-        .plan-trip-btn {
-          justify-content: center;
-          font-size: 0.9rem;
-          padding: 0.625rem 1.25rem;
-          order: 1;
-          width: 100%;
-        }
-        
-        .carousel { height: 250px; }
-        .destination-info-section { grid-template-columns: 1fr; }
-        .cta-section {
-          padding: 3rem 1.5rem;
-        }
-        .cta-section h2 {
-          font-size: 1.75rem;
-        }
-        .cta-section p {
-          font-size: 1rem;
-        }
-      }
-    </style>
-
-    <!-- Hero Section -->
-    <section class="blog-hero">
-      <div class="blog-hero-content">
-        <h1>Discover Your Next Adventure</h1>
-        <p>Explore breathtaking destinations and create memories that last a lifetime</p>
-      </div>
-    </section>
-
-    <!-- Sticky Navigation -->
-    <nav class="blog-nav">
-      <div class="container">
-        <div class="blog-nav-content">
-          <button class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle navigation menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-          <div class="blog-nav-links" id="blogNavLinks">
-            <a href="#paris" class="blog-nav-link">Paris</a>
-            <a href="#tokyo" class="blog-nav-link">Tokyo</a>
-            <a href="#rome" class="blog-nav-link">Rome</a>
-            <a href="#newyork" class="blog-nav-link">New York</a>
-            <a href="#london" class="blog-nav-link">London</a>
-          </div>
-          <a onclick="navigateTo('itinerary')" class="plan-trip-btn">
-            <i data-feather="calendar"></i>
-            Plan Your Dream Trip
-          </a>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Paris Section -->
-    <section id="paris" class="destination-section">
-      <div class="container">
-        <div class="destination-card">
-          <div class="carousel" data-carousel="paris">
-            <button class="carousel-btn carousel-btn-prev" aria-label="Previous image">
-              <i data-feather="chevron-left"></i>
-            </button>
-            <div class="carousel-container">
-              <div class="carousel-slide">
-                <img src="assets/Paris/Img_01.jpg" alt="Paris - Eiffel Tower" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/Paris/Img_02.jpg" alt="Paris - Art and Culture" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/Paris/Img_03.jpg" alt="Paris - Historic Architecture" loading="lazy">
-              </div>
-            </div>
-            <button class="carousel-btn carousel-btn-next" aria-label="Next image">
-              <i data-feather="chevron-right"></i>
-            </button>
-            <div class="carousel-indicators">
-              <button class="carousel-indicator active" data-slide="0"></button>
-              <button class="carousel-indicator" data-slide="1"></button>
-              <button class="carousel-indicator" data-slide="2"></button>
-            </div>
-          </div>
-          
-          <div class="destination-content">
-            <h2 class="destination-title">Paris</h2>
-            <p class="destination-description">
-              The City of Light beckons with its iconic Eiffel Tower, world-class museums, and charming cafés. 
-              Stroll along the Seine, explore the artistic Montmartre, and indulge in exquisite French cuisine. 
-              Paris is a timeless destination where romance, art, and history intertwine in every cobblestone street.
-            </p>
-            
-            <div class="destination-info-section">
-              <div class="info-block">
-                <h3>Best Time to Visit</h3>
-                <ul>
-                  <li>Spring (April to June)</li>
-                  <li>Fall (September to November)</li>
-                  <li>Mild weather and fewer tourists</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Top Attractions</h3>
-                <ul>
-                  <li>Eiffel Tower</li>
-                  <li>Louvre Museum</li>
-                  <li>Notre-Dame Cathedral</li>
-                  <li>Champs-Élysées</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Travel Tips</h3>
-                <ul>
-                  <li>Purchase Museum Pass for skip-the-line access</li>
-                  <li>Use Metro for easy navigation</li>
-                  <li>Book restaurants in advance</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Tags</h3>
-                <div class="tags">
-                  <span class="tag">Romantic Getaway</span>
-                  <span class="tag">Art & Culture</span>
-                  <span class="tag">Historic Landmarks</span>
-                  <span class="tag">Fine Dining</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tokyo Section -->
-    <section id="tokyo" class="destination-section">
-      <div class="container">
-        <div class="destination-card">
-          <div class="carousel" data-carousel="tokyo">
-            <button class="carousel-btn carousel-btn-prev" aria-label="Previous image">
-              <i data-feather="chevron-left"></i>
-            </button>
-            <div class="carousel-container">
-              <div class="carousel-slide">
-                <img src="assets/Tokyo/Img_01.jpg" alt="Tokyo Image 1" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/Tokyo/Img_02.jpg" alt="Tokyo - Traditional Temples" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/Tokyo/Img_03.jpg" alt="Tokyo - Modern City" loading="lazy">
-              </div>
-            </div>
-            <button class="carousel-btn carousel-btn-next" aria-label="Next image">
-              <i data-feather="chevron-right"></i>
-            </button>
-            <div class="carousel-indicators">
-              <button class="carousel-indicator active" data-slide="0"></button>
-              <button class="carousel-indicator" data-slide="1"></button>
-              <button class="carousel-indicator" data-slide="2"></button>
-            </div>
-          </div>
-          
-          <div class="destination-content">
-            <h2 class="destination-title">Tokyo</h2>
-            <p class="destination-description">
-              A mesmerizing blend of ancient traditions and cutting-edge technology, Tokyo offers an unparalleled 
-              urban experience. From serene temples to bustling districts like Shibuya, vibrant street food to 
-              Michelin-starred restaurants, this metropolis never ceases to amaze with its energy and innovation.
-            </p>
-            
-            <div class="destination-info-section">
-              <div class="info-block">
-                <h3>Best Time to Visit</h3>
-                <ul>
-                  <li>Spring (March to May) - Cherry Blossoms</li>
-                  <li>Autumn (September to November)</li>
-                  <li>Comfortable temperatures</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Top Attractions</h3>
-                <ul>
-                  <li>Senso-ji Temple</li>
-                  <li>Tokyo Skytree</li>
-                  <li>Shibuya Crossing</li>
-                  <li>Meiji Shrine</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Travel Tips</h3>
-                <ul>
-                  <li>Get a JR Pass for unlimited train travel</li>
-                  <li>Learn basic Japanese phrases</li>
-                  <li>Always carry cash</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Tags</h3>
-                <div class="tags">
-                  <span class="tag">Technology Hub</span>
-                  <span class="tag">Traditional Culture</span>
-                  <span class="tag">Urban Adventure</span>
-                  <span class="tag">Food Paradise</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Rome Section -->
-    <section id="rome" class="destination-section">
-      <div class="container">
-        <div class="destination-card">
-          <div class="carousel" data-carousel="rome">
-            <button class="carousel-btn carousel-btn-prev" aria-label="Previous image">
-              <i data-feather="chevron-left"></i>
-            </button>
-            <div class="carousel-container">
-              <div class="carousel-slide">
-                <img src="assets/Rome/Img_01.jpg" alt="Rome - Ancient Colosseum" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/Rome/Img_02.jpg" alt="Rome - Beautiful Fountains" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/Rome/Img_03.jpg" alt="Rome - Historic Streets" loading="lazy">
-              </div>
-            </div>
-            <button class="carousel-btn carousel-btn-next" aria-label="Next image">
-              <i data-feather="chevron-right"></i>
-            </button>
-            <div class="carousel-indicators">
-              <button class="carousel-indicator active" data-slide="0"></button>
-              <button class="carousel-indicator" data-slide="1"></button>
-              <button class="carousel-indicator" data-slide="2"></button>
-            </div>
-          </div>
-          
-          <div class="destination-content">
-            <h2 class="destination-title">Rome</h2>
-            <p class="destination-description">
-              The Eternal City is a living museum where ancient ruins stand alongside Renaissance masterpieces. 
-              Walk through history at the Colosseum, toss a coin in the Trevi Fountain, and savor authentic 
-              Italian cuisine. Rome's timeless beauty and rich heritage make every corner a journey through centuries.
-            </p>
-            
-            <div class="destination-info-section">
-              <div class="info-block">
-                <h3>Best Time to Visit</h3>
-                <ul>
-                  <li>Spring (April to June)</li>
-                  <li>Fall (September to October)</li>
-                  <li>Pleasant weather for sightseeing</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Top Attractions</h3>
-                <ul>
-                  <li>Colosseum</li>
-                  <li>Vatican Museums</li>
-                  <li>Trevi Fountain</li>
-                  <li>Roman Forum</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Travel Tips</h3>
-                <ul>
-                  <li>Book skip-the-line tickets in advance</li>
-                  <li>Dress modestly for religious sites</li>
-                  <li>Try local trattorias for authentic food</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Tags</h3>
-                <div class="tags">
-                  <span class="tag">Ancient History</span>
-                  <span class="tag">Renaissance Art</span>
-                  <span class="tag">Italian Cuisine</span>
-                  <span class="tag">Architecture</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- New York Section -->
-    <section id="newyork" class="destination-section">
-      <div class="container">
-        <div class="destination-card">
-          <div class="carousel" data-carousel="newyork">
-            <button class="carousel-btn carousel-btn-prev" aria-label="Previous image">
-              <i data-feather="chevron-left"></i>
-            </button>
-            <div class="carousel-container">
-              <div class="carousel-slide">
-                <img src="assets/New_York/Img_01.jpg" alt="New York - Statue of Liberty" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/New_York/Img_02.jpg" alt="New York - Manhattan Skyline" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/New_York/Img_03.jpg" alt="New York - Times Square" loading="lazy">
-              </div>
-            </div>
-            <button class="carousel-btn carousel-btn-next" aria-label="Next image">
-              <i data-feather="chevron-right"></i>
-            </button>
-            <div class="carousel-indicators">
-              <button class="carousel-indicator active" data-slide="0"></button>
-              <button class="carousel-indicator" data-slide="1"></button>
-              <button class="carousel-indicator" data-slide="2"></button>
-            </div>
-          </div>
-          
-          <div class="destination-content">
-            <h2 class="destination-title">New York</h2>
-            <p class="destination-description">
-              The city that never sleeps pulses with energy, diversity, and endless possibilities. From the iconic 
-              skyline to world-famous museums, Broadway shows to diverse neighborhoods, New York offers an 
-              unmatched urban experience that captures the American dream in its most vibrant form.
-            </p>
-            
-            <div class="destination-info-section">
-              <div class="info-block">
-                <h3>Best Time to Visit</h3>
-                <ul>
-                  <li>Spring (April to June)</li>
-                  <li>Fall (September to November)</li>
-                  <li>Comfortable weather for walking</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Top Attractions</h3>
-                <ul>
-                  <li>Statue of Liberty</li>
-                  <li>Central Park</li>
-                  <li>Times Square</li>
-                  <li>Empire State Building</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Travel Tips</h3>
-                <ul>
-                  <li>Use subway for efficient travel</li>
-                  <li>Book Broadway tickets in advance</li>
-                  <li>Explore different neighborhoods</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Tags</h3>
-                <div class="tags">
-                  <span class="tag">Urban Jungle</span>
-                  <span class="tag">Entertainment</span>
-                  <span class="tag">Shopping</span>
-                  <span class="tag">Museums</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- London Section -->
-    <section id="london" class="destination-section">
-      <div class="container">
-        <div class="destination-card">
-          <div class="carousel" data-carousel="london">
-            <button class="carousel-btn carousel-btn-prev" aria-label="Previous image">
-              <i data-feather="chevron-left"></i>
-            </button>
-            <div class="carousel-container">
-              <div class="carousel-slide">
-                <img src="assets/London/Img_01.jpg" alt="London - Big Ben" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/London/Img_02.jpg" alt="London - London Eye" loading="lazy">
-              </div>
-              <div class="carousel-slide">
-                <img src="assets/London/Img_03.jpg" alt="London - Traditional Culture" loading="lazy">
-              </div>
-            </div>
-            <button class="carousel-btn carousel-btn-next" aria-label="Next image">
-              <i data-feather="chevron-right"></i>
-            </button>
-            <div class="carousel-indicators">
-              <button class="carousel-indicator active" data-slide="0"></button>
-              <button class="carousel-indicator" data-slide="1"></button>
-              <button class="carousel-indicator" data-slide="2"></button>
-            </div>
-          </div>
-          
-          <div class="destination-content">
-            <h2 class="destination-title">London</h2>
-            <p class="destination-description">
-              A perfect blend of royal heritage and modern culture, London captivates with its iconic landmarks, 
-              world-class museums, and diverse neighborhoods. From Buckingham Palace to trendy markets, traditional 
-              pubs to innovative restaurants, the British capital offers something for every traveler.
-            </p>
-            
-            <div class="destination-info-section">
-              <div class="info-block">
-                <h3>Best Time to Visit</h3>
-                <ul>
-                  <li>Late Spring (May to June)</li>
-                  <li>Early Fall (September to October)</li>
-                  <li>Mild weather and festivals</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Top Attractions</h3>
-                <ul>
-                  <li>Big Ben & Parliament</li>
-                  <li>Tower of London</li>
-                  <li>British Museum</li>
-                  <li>London Eye</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Travel Tips</h3>
-                <ul>
-                  <li>Get an Oyster Card for transport</li>
-                  <li>Many museums offer free entry</li>
-                  <li>Try afternoon tea experience</li>
-                </ul>
-              </div>
-              
-              <div class="info-block">
-                <h3>Tags</h3>
-                <div class="tags">
-                  <span class="tag">Royal Heritage</span>
-                  <span class="tag">Museums</span>
-                  <span class="tag">Theatre</span>
-                  <span class="tag">Markets</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="container" style="margin-top: 4rem;">
-      <div class="cta-section">
-        <h2>Ready to Plan Your Dream Trip?</h2>
-        <p>Create your perfect itinerary and discover how affordable your dream vacation can be with our comprehensive trip planner.</p>
-        <a onclick="navigateTo('itinerary')" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem; cursor: pointer;">
-          Plan Your Dream Trip
-        </a>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>Tripzy</h3>
-            <p>Your gateway to unforgettable travel experiences around the world.</p>
-          </div>
-          
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
@@ -1082,7 +273,6 @@
               <li><a onclick="navigateTo('itinerary')">Plan Trip</a></li>
             </ul>
           </div>
-          
           <div class="footer-section">
             <h3>Support</h3>
             <ul>
@@ -1091,172 +281,382 @@
               <li><a href="#">Privacy Policy</a></li>
             </ul>
           </div>
-          
           <div class="footer-section">
             <h3>Connect With Us</h3>
             <div class="footer-social">
-              <a href="#" class="social-icon" aria-label="Facebook">
-                <i data-feather="facebook"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Instagram">
-                <i data-feather="instagram"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Twitter">
-                <i data-feather="twitter"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="YouTube">
-                <i data-feather="youtube"></i>
-              </a>
+              <a href="#" class="social-icon"><i data-feather="facebook"></i></a>
+              <a href="#" class="social-icon"><i data-feather="instagram"></i></a>
+              <a href="#" class="social-icon"><i data-feather="twitter"></i></a>
+              <a href="#" class="social-icon"><i data-feather="youtube"></i></a>
             </div>
           </div>
         </div>
-        
-        <div class="footer-bottom">
-          <p>&copy; 2025 Tripzy. All rights reserved.</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Tripzy. All rights reserved.</p></div>
       </div>
     </footer>
   </div>
 
-  <!-- Page 3: Itinerary -->
-  <div id="page-itinerary" class="page">
+  <!-- ══════════════════════════════════════════════════════════════
+       PAGE 2: Blog / Destinations
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="page-blog" class="page">
     <style>
-      .itinerary-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 3rem 0;
-        text-align: center;
-        margin-bottom: 3rem;
+      /* ── Navbar ── */
+      .blog-nav {
+        background:#fff; border-bottom:1px solid var(--border-color);
+        position:sticky; top:0; z-index:100;
+        box-shadow:0 1px 4px rgba(0,0,0,.08);
       }
-
-      .itinerary-header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        color: #ffffff;
+      .blog-nav-content {
+        display:flex; align-items:center; padding:.625rem 0; gap:1.25rem;
       }
-
-      .itinerary-header p {
-        font-size: 1.1rem;
-        color: rgba(255, 255, 255, 0.95);
+      .nav-brand {
+        display:flex; align-items:center; gap:.375rem;
+        cursor:pointer; color:var(--btn-primary);
+        font-weight:700; font-size:1.1rem; white-space:nowrap; flex-shrink:0;
+        -webkit-user-select:none;
+        user-select:none;
       }
-
-      .itinerary-container {
-        display: grid;
-        grid-template-columns: 1fr 400px;
-        gap: 2rem;
-        margin-bottom: 3rem;
+      .nav-brand i { width:18px; height:18px; stroke-width:2.5; }
+      .blog-nav-links {
+        display:flex; justify-content:center; gap:.25rem; flex:1; flex-wrap:wrap;
       }
-
-      .itinerary-options {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
+      .blog-nav-link {
+        color:var(--text-secondary); text-decoration:none; font-weight:500; font-size:.9rem;
+        padding:.375rem .75rem; border-radius:6px; transition:color .2s; cursor:pointer;
       }
-
-      .option-category {
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-        padding: 2rem;
+      .blog-nav-link:hover { color:var(--btn-primary); }
+      .plan-trip-btn {
+        background:var(--btn-primary); color:#fff !important; text-decoration:none;
+        padding:.5rem 1rem; border-radius:6px; font-weight:600; font-size:.875rem;
+        transition:background .2s,transform .2s; display:flex; align-items:center; gap:.375rem;
+        white-space:nowrap; cursor:pointer; border:none; flex-shrink:0;
       }
-
-      .category-title {
-        font-size: 1.75rem;
-        color: var(--text-primary);
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid var(--btn-primary);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+      .plan-trip-btn:hover { background:var(--btn-primary-hover); transform:translateY(-1px); }
+      .hamburger-menu {
+        display:none; flex-direction:column; gap:4px;
+        background:none; border:none; cursor:pointer; padding:.5rem; z-index:101; flex-shrink:0;
       }
+      .hamburger-menu span { width:22px; height:2.5px; background:var(--text-primary); border-radius:3px; transition:all .3s; }
+      .hamburger-menu.active span:nth-child(1) { transform:rotate(45deg) translate(7px,7px); }
+      .hamburger-menu.active span:nth-child(2) { opacity:0; }
+      .hamburger-menu.active span:nth-child(3) { transform:rotate(-45deg) translate(7px,-7px); }
 
-      .category-icon {
-        width: 32px;
-        height: 32px;
-        color: var(--btn-primary);
+      /* ── Hero ── */
+      .blog-hero {
+        background:url('assets/Hero_bg.png') center/cover no-repeat;
+        padding:6rem 2rem; min-height:500px;
+        display:flex; align-items:center; justify-content:center; text-align:center;
+        position:relative; overflow:hidden;
       }
+      .blog-hero::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,.45); }
+      .blog-hero-content { position:relative; z-index:1; max-width:800px; margin:0 auto; }
+      .blog-hero h1 { font-size:3.5rem; margin-bottom:1rem; text-shadow:0 2px 10px rgba(0,0,0,.2); color:#fff; }
+      .blog-hero p  { font-size:1.2rem; color:rgba(255,255,255,.9); margin-bottom:2rem; }
+      .blog-hero-cta {
+        display:inline-flex; align-items:center; gap:.5rem;
+        background:#fff; color:var(--btn-primary); padding:.875rem 2rem;
+        border-radius:8px; font-weight:700; font-size:1rem; border:none; cursor:pointer;
+        transition:transform .2s,box-shadow .2s;
+      }
+      .blog-hero-cta:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); }
 
-      @media (max-width: 992px) {
-        .itinerary-container {
-          grid-template-columns: 1fr;
+      /* ── Popular destinations strip ── */
+      .popular-strip {
+        background:#fff; border-bottom:1px solid var(--border-color);
+        padding:.75rem 0; font-size:.875rem;
+      }
+      .popular-strip-content {
+        display:flex; align-items:center; gap:2rem; flex-wrap:wrap;
+      }
+      .popular-strip-label {
+        display:flex; align-items:center; gap:.375rem;
+        font-weight:600; color:var(--text-primary); white-space:nowrap; flex-shrink:0;
+      }
+      .popular-strip-label i { width:15px; height:15px; color:var(--btn-primary); }
+      .popular-strip-links { display:flex; gap:1.5rem; flex:1; flex-wrap:wrap; }
+      .popular-strip-link {
+        color:var(--text-secondary); text-decoration:none; font-weight:500;
+        transition:color .2s;
+      }
+      .popular-strip-link:hover { color:var(--btn-primary); }
+      .explore-all-link {
+        color:var(--btn-primary); font-weight:600; white-space:nowrap;
+        cursor:pointer; text-decoration:none; flex-shrink:0;
+      }
+      .explore-all-link:hover { text-decoration:underline; }
+
+      /* ── Your Trips section (blog page inline) ── */
+      .your-trips-section { padding:2.5rem 0; border-bottom:1px solid var(--border-color); }
+      .your-trips-header {
+        display:flex; justify-content:space-between; align-items:flex-end;
+        margin-bottom:1.5rem;
+      }
+      .your-trips-header h2 {
+        font-size:1.5rem; margin:0; display:flex; align-items:center; gap:.5rem;
+      }
+      .your-trips-header h2 i { width:20px; height:20px; color:var(--btn-primary); }
+      .your-trips-subtitle { color:var(--text-secondary); font-size:.9rem; margin:.25rem 0 0; }
+      .view-all-link { color:var(--btn-primary); font-weight:600; cursor:pointer; font-size:.9rem; }
+      .view-all-link:hover { text-decoration:underline; }
+
+      /* ── Trip card (updated for thumbnail layout) ── */
+      .trip-card {
+        background:var(--bg-card); border:1px solid var(--border-color); border-radius:14px;
+        padding:1.25rem; margin-bottom:1rem; box-shadow:var(--shadow-card);
+        display:flex; gap:1.25rem; align-items:flex-start;
+        transition:box-shadow .2s,transform .2s;
+      }
+      .trip-card:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(0,0,0,.1); }
+      .trip-thumb {
+        width:150px; height:110px; border-radius:10px; object-fit:cover; flex-shrink:0;
+      }
+      .trip-thumb-placeholder {
+        width:150px; height:110px; border-radius:10px; flex-shrink:0;
+        background:#e7f3ff; display:flex; align-items:center; justify-content:center;
+        color:var(--btn-primary);
+      }
+      .trip-thumb-placeholder i { width:28px; height:28px; }
+      .trip-card-body { flex:1; min-width:0; }
+      .trip-card-actions {
+        display:flex; flex-direction:column; align-items:flex-end;
+        justify-content:space-between; flex-shrink:0; gap:.75rem;
+      }
+      .trip-title { font-size:1.05rem; font-weight:600; margin:.5rem 0 .5rem; color:var(--text-primary); }
+      .trip-ref { font-family:monospace; font-size:.8rem; background:#f0f4ff; color:var(--btn-primary); padding:.2rem .5rem; border-radius:4px; font-weight:700; }
+      .trip-badge { font-size:.72rem; font-weight:600; padding:.2rem .6rem; border-radius:10px; }
+      .badge-confirmed { background:#d3f9d8; color:#2f9e44; }
+      .badge-cancelled  { background:#ffe3e3; color:#e03131; }
+      .badge-upcoming   { background:#fff3bf; color:#e67700; }
+      .badge-past       { background:#f1f3f5; color:#868e96; }
+      .badge-nodateyet  { background:#e7f3ff; color:var(--btn-primary); }
+      .trip-total { font-size:1.2rem; font-weight:700; color:var(--btn-primary); white-space:nowrap; }
+      .trip-meta { display:flex; gap:1.25rem; font-size:.78rem; color:var(--text-secondary); flex-wrap:wrap; margin-top:.375rem; }
+      .trip-meta span { display:flex; align-items:center; gap:.25rem; }
+      .trip-options-row { font-size:.8rem; color:var(--text-secondary); margin-top:.375rem; }
+      .view-details-btn {
+        background:none; border:1.5px solid var(--btn-primary); color:var(--btn-primary);
+        padding:.4rem .875rem; border-radius:6px; cursor:pointer;
+        font-size:.82rem; font-weight:600; white-space:nowrap; transition:all .2s;
+      }
+      .view-details-btn:hover { background:var(--btn-primary); color:#fff; }
+
+      /* ── Destinations blog ── */
+      .destination-section { padding:4rem 2rem; background:var(--bg-primary); }
+      .destination-section:nth-child(even) { background:#fff; }
+      .destination-card {
+        max-width:1000px; margin:0 auto; background:#fff; border-radius:var(--radius);
+        padding:2rem; box-shadow:var(--shadow-card); border:1px solid var(--border-color);
+      }
+      .destination-section:nth-child(even) .destination-card { background:var(--bg-primary); }
+      .destination-title { font-size:2rem; margin-bottom:1rem; color:var(--text-primary); }
+      .destination-description { font-size:1rem; line-height:1.8; color:var(--text-secondary); margin-bottom:1.5rem; }
+      .destination-info-section { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border-color); }
+      .info-block h3 { font-size:1rem; color:var(--text-primary); margin-bottom:.75rem; font-weight:600; }
+      .info-block ul { list-style:none; padding:0; margin:0; }
+      .info-block li { padding:.5rem 0; color:var(--text-secondary); font-size:.95rem; }
+      .info-block li::before { content:"• "; color:var(--btn-primary); font-weight:bold; display:inline-block; width:1em; margin-left:-1em; }
+      .blog-cta-section {
+        text-align:center; padding:4rem 2rem;
+        background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+        border-radius:var(--radius); color:white; margin:3rem 0;
+      }
+      .blog-cta-section h2 { font-size:2.5rem; margin-bottom:1rem; color:white; }
+      .blog-cta-section p  { font-size:1.2rem; margin-bottom:2rem; color:rgba(255,255,255,.95); max-width:700px; margin-left:auto; margin-right:auto; }
+      .blog-cta-section .btn { background:white; color:var(--btn-primary); box-shadow:0 4px 15px rgba(0,0,0,.2); }
+      .blog-cta-section .btn:hover { transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,.3); }
+
+      @media (max-width:768px) {
+        .blog-hero { padding:3rem 1.5rem; }
+        .blog-hero h1 { font-size:2rem; }
+        .blog-hero p  { font-size:1rem; }
+        .hamburger-menu { display:flex; }
+        .blog-nav-content { flex-wrap:wrap; padding:.625rem 1rem; }
+        .blog-nav-links {
+          flex-direction:column; gap:0; width:100%; order:3;
+          max-height:0; overflow:hidden; transition:max-height .3s ease;
         }
-
-        .price-summary {
-          position: static;
-        }
+        .blog-nav-links.active { max-height:320px; padding-top:.5rem; }
+        .blog-nav-link { padding:.75rem 1rem; border-bottom:1px solid var(--border-color); }
+        .popular-strip-label { display:none; }
+        .carousel { height:250px !important; }
+        .destination-info-section { grid-template-columns:1fr; }
+        .trip-thumb, .trip-thumb-placeholder { width:90px; height:70px; }
+        .trip-card-actions { display:none; }
+        .blog-cta-section { padding:3rem 1.5rem; }
+        .blog-cta-section h2 { font-size:1.75rem; }
       }
     </style>
 
+    <!-- ── Sticky Navbar ── -->
+    <nav class="blog-nav">
+      <div class="container">
+        <div class="blog-nav-content">
+          <!-- Logo -->
+          <div class="nav-brand" onclick="navigateTo('blog')" role="button" tabindex="0" aria-label="Tripzy home">
+            <i data-feather="send"></i>
+            <span>Tripzy</span>
+          </div>
+          <!-- Destination links -->
+          <div class="blog-nav-links" id="blogNavLinks">
+            <a href="#paris"   class="blog-nav-link">Paris</a>
+            <a href="#tokyo"   class="blog-nav-link">Tokyo</a>
+            <a href="#rome"    class="blog-nav-link">Rome</a>
+            <a href="#newyork" class="blog-nav-link">New York</a>
+            <a href="#london"  class="blog-nav-link">London</a>
+          </div>
+          <!-- User controls + hamburger -->
+          <div id="nav-right" style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
+            <span id="nav-user-name" style="font-size:.82rem;color:var(--text-secondary);white-space:nowrap;display:none;"></span>
+            <button type="button" onclick="navigateTo('mytrips')" id="nav-mytrips-btn" class="plan-trip-btn" style="display:none;">
+              <i data-feather="map" style="width:14px;height:14px;"></i> My Trips
+            </button>
+            <button type="button" onclick="navigateTo('itinerary')" class="plan-trip-btn">
+              <i data-feather="calendar" style="width:14px;height:14px;"></i> Plan Trip
+            </button>
+            <button type="button" onclick="doLogout()" id="nav-logout-btn" title="Logout" style="display:none;background:#f1f3f5;color:#555;border:none;padding:.5rem .625rem;border-radius:6px;cursor:pointer;display:flex;align-items:center;">
+              <i data-feather="log-out" style="width:15px;height:15px;"></i>
+            </button>
+            <button type="button" class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle menu">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <section class="blog-hero">
+      <div class="blog-hero-content">
+        <h1>Discover Your Next Adventure</h1>
+        <p>Explore breathtaking destinations and create memories that last a lifetime</p>
+        <button type="button" class="blog-hero-cta" onclick="navigateTo('itinerary')">
+          <i data-feather="arrow-right" style="width:16px;height:16px;"></i>
+          Plan Your Trip
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Popular destinations quick-strip ── -->
+    <div class="popular-strip">
+      <div class="container">
+        <div class="popular-strip-content">
+          <div class="popular-strip-label">
+            <i data-feather="globe"></i>
+            Popular Destinations
+          </div>
+          <div class="popular-strip-links">
+            <a href="#paris"   class="popular-strip-link">Paris</a>
+            <a href="#tokyo"   class="popular-strip-link">Tokyo</a>
+            <a href="#rome"    class="popular-strip-link">Rome</a>
+            <a href="#newyork" class="popular-strip-link">New York</a>
+            <a href="#london"  class="popular-strip-link">London</a>
+          </div>
+          <a class="explore-all-link" onclick="document.getElementById('destinations-container').scrollIntoView({behavior:'smooth'})">
+            Explore All Destinations &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Your Trips (shown when logged in, populated by JS) ── -->
+    <section id="your-trips-section" style="display:none;" class="your-trips-section">
+      <div class="container">
+        <div class="your-trips-header">
+          <div>
+            <h2>
+              <i data-feather="briefcase"></i>
+              Your Trips
+            </h2>
+            <p class="your-trips-subtitle">Manage your upcoming and past adventures</p>
+          </div>
+          <a class="view-all-link" onclick="navigateTo('mytrips')">View All Trips &rarr;</a>
+        </div>
+
+        <div class="trips-tabs" id="blog-trips-tabs">
+          <button type="button" class="trips-tab active" data-filter="upcoming">Upcoming</button>
+          <button type="button" class="trips-tab" data-filter="past">Past</button>
+          <button type="button" class="trips-tab" data-filter="all">All Trips</button>
+        </div>
+
+        <div id="blog-trips-list">
+          <div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div>
+        </div>
+
+        <div style="text-align:center;margin-top:1.5rem;">
+          <button type="button" onclick="navigateTo('itinerary')" class="btn btn-primary">
+            <i data-feather="plus" style="width:15px;height:15px;"></i> Book a New Trip
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Destinations blog (dynamic) ── -->
+    <div id="destinations-container">
+      <div class="loading-state">
+        <span class="spinner spinner-dark"></span> Loading destinations…
+      </div>
+    </div>
+
+    <section class="container" style="margin-top:4rem;">
+      <div class="blog-cta-section">
+        <h2>Ready to Plan Your Dream Trip?</h2>
+        <p>Create your perfect itinerary and discover how affordable your dream vacation can be.</p>
+        <button type="button" onclick="navigateTo('itinerary')" class="btn btn-primary" style="font-size:1.1rem;padding:1rem 2rem;">Plan Your Dream Trip</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section"><h3>Tripzy</h3><p>Your gateway to unforgettable travel experiences around the world.</p></div>
+          <div class="footer-section"><h3>Quick Links</h3><ul><li><a onclick="navigateTo('blog')">Destinations</a></li><li><a onclick="navigateTo('itinerary')">Plan Trip</a></li><li><a onclick="navigateTo('mytrips')">My Trips</a></li></ul></div>
+          <div class="footer-section"><h3>Support</h3><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact Us</a></li><li><a href="#">FAQs</a></li></ul></div>
+          <div class="footer-section"><h3>Connect With Us</h3><div class="footer-social"><a href="#" class="social-icon"><i data-feather="facebook"></i></a><a href="#" class="social-icon"><i data-feather="instagram"></i></a><a href="#" class="social-icon"><i data-feather="twitter"></i></a></div></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Tripzy. All rights reserved.</p></div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       PAGE 3: Itinerary
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="page-itinerary" class="page">
+    <style>
+      .itinerary-header { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:3rem 0; text-align:center; margin-bottom:3rem; }
+      .itinerary-header h1 { font-size:2.5rem; margin-bottom:.5rem; color:#fff; }
+      .itinerary-header p  { font-size:1.1rem; color:rgba(255,255,255,.95); }
+      .itinerary-container { display:grid; grid-template-columns:1fr 400px; gap:2rem; margin-bottom:3rem; }
+      .itinerary-options { display:flex; flex-direction:column; gap:2rem; }
+      .option-category { background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius); padding:2rem; }
+      .category-title { font-size:1.75rem; color:var(--text-primary); margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:2px solid var(--btn-primary); display:flex; align-items:center; gap:.75rem; }
+      .category-icon { width:32px; height:32px; color:var(--btn-primary); }
+      @media (max-width:992px) { .itinerary-container { grid-template-columns:1fr; } .price-summary { position:static; } }
+    </style>
+
     <div class="page-wrapper">
-      <!-- Header -->
       <header class="itinerary-header">
         <div class="container">
-          <h1>🗺️ Build Your Perfect Itinerary</h1>
+          <h1>Build Your Perfect Itinerary</h1>
           <p>Select your travel options and see real-time pricing</p>
         </div>
       </header>
 
-      <!-- Main Content -->
       <div class="container">
         <div class="itinerary-container">
-          <!-- Options Column -->
-          <div class="itinerary-options">
-            
-            <!-- Destination Selection -->
+          <div class="itinerary-options" id="itinerary-options-col">
+            <!-- Destination checkboxes -->
             <div class="option-category">
               <h2 class="category-title">
                 <i data-feather="map-pin" class="category-icon"></i>
                 Select Your Destinations
               </h2>
-              <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.6;">
-                <strong>Note:</strong> Destination fees cover entry visas, travel insurance, local transportation passes, 
-                and government tourism taxes required for international travel.
+              <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:1.5rem;line-height:1.6;">
+                <strong>Note:</strong> Destination fees cover entry visas, travel insurance, local transportation passes, and government tourism taxes.
               </p>
-              <div class="checkbox-list">
-                <label class="checkbox-item" for="dest-paris">
-                  <input type="checkbox" id="dest-paris" data-id="dest-paris" data-price="450">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🗼 Paris, France</div>
-                    <div class="checkbox-subtitle">The City of Light - Art, Culture & Romance</div>
-                  </div>
-                  <div class="checkbox-price">₹450</div>
-                </label>
-                
-                <label class="checkbox-item" for="dest-tokyo">
-                  <input type="checkbox" id="dest-tokyo" data-id="dest-tokyo" data-price="580">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🗼 Tokyo, Japan</div>
-                    <div class="checkbox-subtitle">Modern Metropolis meets Ancient Traditions</div>
-                  </div>
-                  <div class="checkbox-price">₹580</div>
-                </label>
-                
-                <label class="checkbox-item" for="dest-rome">
-                  <input type="checkbox" id="dest-rome" data-id="dest-rome" data-price="420">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🏛️ Rome, Italy</div>
-                    <div class="checkbox-subtitle">The Eternal City - History & Architecture</div>
-                  </div>
-                  <div class="checkbox-price">₹420</div>
-                </label>
-                
-                <label class="checkbox-item" for="dest-newyork">
-                  <input type="checkbox" id="dest-newyork" data-id="dest-newyork" data-price="520">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🗽 New York, USA</div>
-                    <div class="checkbox-subtitle">The City That Never Sleeps</div>
-                  </div>
-                  <div class="checkbox-price">₹520</div>
-                </label>
-                
-                <label class="checkbox-item" for="dest-london">
-                  <input type="checkbox" id="dest-london" data-id="dest-london" data-price="480">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🏰 London, UK</div>
-                    <div class="checkbox-subtitle">Royal Heritage & Modern Culture</div>
-                  </div>
-                  <div class="checkbox-price">₹480</div>
-                </label>
+              <div id="dest-checkbox-list" class="checkbox-list">
+                <div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div>
               </div>
             </div>
 
@@ -1266,42 +666,8 @@
                 <i data-feather="navigation" class="category-icon"></i>
                 Travel Options
               </h2>
-              <div class="checkbox-list">
-                <label class="checkbox-item" for="flight">
-                  <input type="checkbox" id="flight" data-id="flight" data-price="1200">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">✈️ Round-Trip Flight</div>
-                    <div class="checkbox-subtitle">Economy class with baggage allowance</div>
-                  </div>
-                  <div class="checkbox-price">₹1,200</div>
-                </label>
-                
-                <label class="checkbox-item" for="hotel">
-                  <input type="checkbox" id="hotel" data-id="hotel" data-price="2100">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🏨 Luxury Hotel Stay</div>
-                    <div class="checkbox-subtitle">7 nights in 4-star accommodation</div>
-                  </div>
-                  <div class="checkbox-price">₹2,100</div>
-                </label>
-                
-                <label class="checkbox-item" for="car">
-                  <input type="checkbox" id="car" data-id="car" data-price="450">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🚗 Car Rental</div>
-                    <div class="checkbox-subtitle">7-day compact car rental with insurance</div>
-                  </div>
-                  <div class="checkbox-price">₹450</div>
-                </label>
-                
-                <label class="checkbox-item" for="airport">
-                  <input type="checkbox" id="airport" data-id="airport" data-price="120">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🚕 Airport Transfers</div>
-                    <div class="checkbox-subtitle">Round-trip private transfers</div>
-                  </div>
-                  <div class="checkbox-price">₹120</div>
-                </label>
+              <div id="travel-checkbox-list" class="checkbox-list">
+                <div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div>
               </div>
             </div>
 
@@ -1311,42 +677,8 @@
                 <i data-feather="coffee" class="category-icon"></i>
                 Food Packages
               </h2>
-              <div class="checkbox-list">
-                <label class="checkbox-item" for="breakfast">
-                  <input type="checkbox" id="breakfast" data-id="breakfast" data-price="180">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">☕ Daily Breakfast</div>
-                    <div class="checkbox-subtitle">Buffet breakfast at hotel</div>
-                  </div>
-                  <div class="checkbox-price">₹180</div>
-                </label>
-                
-                <label class="checkbox-item" for="allinclusive">
-                  <input type="checkbox" id="allinclusive" data-id="allinclusive" data-price="750">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🍽️ All-Inclusive Dining</div>
-                    <div class="checkbox-subtitle">Three meals daily plus snacks</div>
-                  </div>
-                  <div class="checkbox-price">₹750</div>
-                </label>
-                
-                <label class="checkbox-item" for="finedining">
-                  <input type="checkbox" id="finedining" data-id="finedining" data-price="420">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🍷 Fine Dining Experience</div>
-                    <div class="checkbox-subtitle">Two Michelin-star restaurant meals</div>
-                  </div>
-                  <div class="checkbox-price">₹420</div>
-                </label>
-                
-                <label class="checkbox-item" for="foodtour">
-                  <input type="checkbox" id="foodtour" data-id="foodtour" data-price="280">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🥘 Local Food Tour</div>
-                    <div class="checkbox-subtitle">Guided culinary exploration</div>
-                  </div>
-                  <div class="checkbox-price">₹280</div>
-                </label>
+              <div id="food-checkbox-list" class="checkbox-list">
+                <div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div>
               </div>
             </div>
 
@@ -1354,62 +686,10 @@
             <div class="option-category">
               <h2 class="category-title">
                 <i data-feather="compass" class="category-icon"></i>
-                Activities & Experiences
+                Activities &amp; Experiences
               </h2>
-              <div class="checkbox-list">
-                <label class="checkbox-item" for="citytour">
-                  <input type="checkbox" id="citytour" data-id="citytour" data-price="150">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🏙️ City Sightseeing Tour</div>
-                    <div class="checkbox-subtitle">Full-day guided tour of major attractions</div>
-                  </div>
-                  <div class="checkbox-price">₹150</div>
-                </label>
-                
-                <label class="checkbox-item" for="museum">
-                  <input type="checkbox" id="museum" data-id="museum" data-price="95">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🎨 Museum Pass</div>
-                    <div class="checkbox-subtitle">7-day unlimited museum access</div>
-                  </div>
-                  <div class="checkbox-price">₹95</div>
-                </label>
-                
-                <label class="checkbox-item" for="adventure">
-                  <input type="checkbox" id="adventure" data-id="adventure" data-price="380">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🏔️ Adventure Activities</div>
-                    <div class="checkbox-subtitle">Hiking, zip-lining, water sports</div>
-                  </div>
-                  <div class="checkbox-price">₹380</div>
-                </label>
-                
-                <label class="checkbox-item" for="spa">
-                  <input type="checkbox" id="spa" data-id="spa" data-price="240">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">💆 Spa & Wellness Package</div>
-                    <div class="checkbox-subtitle">Three relaxation sessions</div>
-                  </div>
-                  <div class="checkbox-price">₹240</div>
-                </label>
-                
-                <label class="checkbox-item" for="nightlife">
-                  <input type="checkbox" id="nightlife" data-id="nightlife" data-price="180">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🎭 Nightlife Experience</div>
-                    <div class="checkbox-subtitle">VIP access to top venues</div>
-                  </div>
-                  <div class="checkbox-price">₹180</div>
-                </label>
-                
-                <label class="checkbox-item" for="cruise">
-                  <input type="checkbox" id="cruise" data-id="cruise" data-price="320">
-                  <div class="checkbox-content">
-                    <div class="checkbox-title">🚢 Sunset Cruise</div>
-                    <div class="checkbox-subtitle">Evening cruise with dinner</div>
-                  </div>
-                  <div class="checkbox-price">₹320</div>
-                </label>
+              <div id="activity-checkbox-list" class="checkbox-list">
+                <div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div>
               </div>
             </div>
           </div>
@@ -1417,24 +697,19 @@
           <!-- Price Summary Sidebar -->
           <div>
             <div class="price-summary">
-              <h3 style="margin-bottom: 1.5rem; color: var(--text-primary); font-size: 1.5rem;">
-                Trip Summary
-              </h3>
-              
+              <h3 style="margin-bottom:1.5rem;color:var(--text-primary);font-size:1.5rem;">Trip Summary</h3>
               <div id="selectedItems">
-                <p style="text-align: center; color: var(--text-secondary); padding: 2rem 0;">
-                  <i data-feather="info" style="width: 24px; height: 24px; margin-bottom: 0.5rem;"></i><br>
+                <p style="text-align:center;color:var(--text-secondary);padding:2rem 0;">
+                  <i data-feather="info" style="width:24px;height:24px;margin-bottom:.5rem;"></i><br>
                   No items selected yet
                 </p>
               </div>
-              
-              <div class="price-row" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--btn-primary);">
-                <span class="price-label" style="font-size: 1.25rem; font-weight: 600;">Total Amount</span>
+              <div class="price-row" style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid var(--btn-primary);">
+                <span class="price-label" style="font-size:1.25rem;font-weight:600;">Total Amount</span>
                 <span class="total-price" id="totalPrice">₹0</span>
               </div>
-              
               <button id="confirmTripBtn" class="btn btn-primary btn-block mt-4">
-                <i data-feather="check-circle" style="width: 18px; height: 18px;"></i>
+                <i data-feather="check-circle" style="width:18px;height:18px;"></i>
                 Confirm Trip
               </button>
             </div>
@@ -1443,199 +718,164 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
-          <div class="footer-section">
-            <h3>Tripzy</h3>
-            <p>Your gateway to unforgettable travel experiences around the world.</p>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a onclick="navigateTo('registration')">Home</a></li>
-              <li><a onclick="navigateTo('blog')">Destinations</a></li>
-              <li><a onclick="navigateTo('itinerary')">Plan Trip</a></li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Support</h3>
-            <ul>
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Connect With Us</h3>
-            <div class="footer-social">
-              <a href="#" class="social-icon" aria-label="Facebook">
-                <i data-feather="facebook"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Instagram">
-                <i data-feather="instagram"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Twitter">
-                <i data-feather="twitter"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="YouTube">
-                <i data-feather="youtube"></i>
-              </a>
-            </div>
-          </div>
+          <div class="footer-section"><h3>Tripzy</h3><p>Your gateway to unforgettable travel experiences around the world.</p></div>
+          <div class="footer-section"><h3>Quick Links</h3><ul><li><a onclick="navigateTo('registration')">Home</a></li><li><a onclick="navigateTo('blog')">Destinations</a></li><li><a onclick="navigateTo('itinerary')">Plan Trip</a></li></ul></div>
+          <div class="footer-section"><h3>Support</h3><ul><li><a href="#">Help Center</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+          <div class="footer-section"><h3>Connect With Us</h3><div class="footer-social"><a href="#" class="social-icon"><i data-feather="facebook"></i></a><a href="#" class="social-icon"><i data-feather="instagram"></i></a><a href="#" class="social-icon"><i data-feather="twitter"></i></a><a href="#" class="social-icon"><i data-feather="youtube"></i></a></div></div>
         </div>
-        
-        <div class="footer-bottom">
-          <p>&copy; 2025 Tripzy. All rights reserved.</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Tripzy. All rights reserved.</p></div>
       </div>
     </footer>
   </div>
 
-  <!-- Page 4: Confirmation -->
+  <!-- ══════════════════════════════════════════════════════════════
+       PAGE 4: Confirmation
+  ══════════════════════════════════════════════════════════════ -->
   <div id="page-confirmation" class="page">
     <div class="page-wrapper">
       <div class="container">
-        <!-- Confirmation Hero -->
         <div class="confirmation-hero">
-          <div class="confirmation-icon">
-            <i data-feather="check-circle"></i>
-          </div>
+          <div class="confirmation-icon"><i data-feather="check-circle"></i></div>
           <h1>Your Journey with Tripzy is Confirmed!</h1>
-          <p style="font-size: 1.1rem; margin-top: 1rem;">
-            Get ready for an unforgettable adventure. Your travel dreams are about to come true!
-          </p>
+          <p style="font-size:1.1rem;margin-top:1rem;">Get ready for an unforgettable adventure. Your travel dreams are about to come true!</p>
+          <p style="margin-top:.5rem;font-size:.95rem;opacity:.9;">Booking Ref: <strong id="bookingRef">—</strong></p>
         </div>
 
-        <!-- User Information -->
         <div class="summary-card">
           <h2 class="summary-header">Your Information</h2>
           <div class="summary-item">
+            <span class="summary-label">Name</span>
+            <span class="summary-value" id="confUserName">—</span>
+          </div>
+          <div class="summary-item">
             <span class="summary-label">Email</span>
-            <span class="summary-value" id="userEmail">-</span>
+            <span class="summary-value" id="confUserEmail">—</span>
           </div>
           <div class="summary-item">
             <span class="summary-label">Phone</span>
-            <span class="summary-value" id="userPhone">-</span>
+            <span class="summary-value" id="confUserPhone">—</span>
           </div>
           <div class="summary-item">
             <span class="summary-label">Booking Date</span>
-            <span class="summary-value" id="bookingDate">-</span>
+            <span class="summary-value" id="bookingDate">—</span>
           </div>
         </div>
 
-        <!-- Trip Summary -->
         <div class="summary-card">
           <h2 class="summary-header">Trip Details</h2>
-          <div id="tripItems"></div>
-          <div class="summary-item" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--btn-primary);">
-            <span class="summary-label" style="font-size: 1.25rem; font-weight: 600;">Total Amount</span>
-            <span class="summary-value" style="font-size: 1.5rem; color: var(--btn-primary); font-weight: 700;" id="totalAmount">₹0</span>
+          <div id="tripItems"><div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div></div>
+          <div class="summary-item" style="margin-top:1.5rem;padding-top:1.5rem;border-top:2px solid var(--btn-primary);">
+            <span class="summary-label" style="font-size:1.25rem;font-weight:600;">Total Amount</span>
+            <span class="summary-value" style="font-size:1.5rem;color:var(--btn-primary);font-weight:700;" id="totalAmount">₹0</span>
           </div>
         </div>
 
-        <!-- Share Section -->
         <div class="cta-section">
           <h2>Share Your Excitement!</h2>
           <p>Tell your friends about your upcoming adventure</p>
           <div class="social-links">
-            <a href="#" class="social-icon" aria-label="Facebook">
-              <i data-feather="facebook"></i>
-            </a>
-            <a href="#" class="social-icon" aria-label="Instagram">
-              <i data-feather="instagram"></i>
-            </a>
-            <a href="#" class="social-icon" aria-label="Twitter">
-              <i data-feather="twitter"></i>
-            </a>
-            <a href="#" class="social-icon" aria-label="YouTube">
-              <i data-feather="youtube"></i>
-            </a>
+            <a href="#" class="social-icon"><i data-feather="facebook"></i></a>
+            <a href="#" class="social-icon"><i data-feather="instagram"></i></a>
+            <a href="#" class="social-icon"><i data-feather="twitter"></i></a>
+            <a href="#" class="social-icon"><i data-feather="youtube"></i></a>
           </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="action-buttons" style="display: flex; gap: 1rem; justify-content: center; margin: 3rem 0; flex-wrap: wrap;">
-          <button onclick="localStorage.clear(); navigateTo('registration');" class="btn btn-primary">
-            <i data-feather="refresh-cw" style="width: 18px; height: 18px;"></i>
+        <div class="action-buttons" style="display:flex;gap:1rem;justify-content:center;margin:3rem 0;flex-wrap:wrap;">
+          <button id="planAnotherBtn" class="btn btn-primary">
+            <i data-feather="refresh-cw" style="width:18px;height:18px;"></i>
             Plan Another Journey
           </button>
           <button onclick="window.print()" class="btn btn-secondary">
-            <i data-feather="printer" style="width: 18px; height: 18px;"></i>
+            <i data-feather="printer" style="width:18px;height:18px;"></i>
             Print Confirmation
           </button>
         </div>
 
-        <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem;">
-          Need help? Contact us at 
-          <a href="mailto:support@tripzy.com" style="color: var(--btn-primary); text-decoration: none;">
-            support@tripzy.com
-          </a>
+        <p style="text-align:center;color:var(--text-secondary);font-size:.9rem;margin-bottom:2rem;">
+          Need help? Contact us at
+          <a href="mailto:support@tripzy.com" style="color:var(--btn-primary);text-decoration:none;">support@tripzy.com</a>
         </p>
 
-        <!-- Confetti Animation -->
-        <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></canvas>
+        <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;"></canvas>
       </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
-          <div class="footer-section">
-            <h3>Tripzy</h3>
-            <p>Your gateway to unforgettable travel experiences around the world.</p>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a onclick="navigateTo('registration')">Home</a></li>
-              <li><a onclick="navigateTo('blog')">Destinations</a></li>
-              <li><a onclick="navigateTo('itinerary')">Plan Trip</a></li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Support</h3>
-            <ul>
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-            </ul>
-          </div>
-          
-          <div class="footer-section">
-            <h3>Connect With Us</h3>
-            <div class="footer-social">
-              <a href="#" class="social-icon" aria-label="Facebook">
-                <i data-feather="facebook"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Instagram">
-                <i data-feather="instagram"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="Twitter">
-                <i data-feather="twitter"></i>
-              </a>
-              <a href="#" class="social-icon" aria-label="YouTube">
-                <i data-feather="youtube"></i>
-              </a>
-            </div>
-          </div>
+          <div class="footer-section"><h3>Tripzy</h3><p>Your gateway to unforgettable travel experiences around the world.</p></div>
+          <div class="footer-section"><h3>Quick Links</h3><ul><li><a onclick="navigateTo('registration')">Home</a></li><li><a onclick="navigateTo('blog')">Destinations</a></li><li><a onclick="navigateTo('itinerary')">Plan Trip</a></li></ul></div>
+          <div class="footer-section"><h3>Support</h3><ul><li><a href="#">Help Center</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+          <div class="footer-section"><h3>Connect With Us</h3><div class="footer-social"><a href="#" class="social-icon"><i data-feather="facebook"></i></a><a href="#" class="social-icon"><i data-feather="instagram"></i></a><a href="#" class="social-icon"><i data-feather="twitter"></i></a><a href="#" class="social-icon"><i data-feather="youtube"></i></a></div></div>
         </div>
-        
-        <div class="footer-bottom">
-          <p>&copy; 2025 Tripzy. All rights reserved.</p>
-        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Tripzy. All rights reserved.</p></div>
       </div>
     </footer>
   </div>
 
-  <!-- Main merged script -->
+  <!-- ══════════════════════════════════════════════════════════════
+       PAGE 5: My Trips
+  ══════════════════════════════════════════════════════════════ -->
+  <div id="page-mytrips" class="page">
+    <style>
+      /* page header */
+      .mytrips-header { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:3rem 0; text-align:center; margin-bottom:2rem; }
+      .mytrips-header h1 { font-size:2.5rem; color:#fff; margin-bottom:.5rem; }
+      .mytrips-header p  { color:rgba(255,255,255,.9); font-size:1.05rem; }
+      /* tabs — shared with blog "Your Trips" section */
+      .trips-tabs { display:flex; border-bottom:2px solid var(--border-color); margin-bottom:1.5rem; }
+      .trips-tab  { flex:1; background:none; border:none; padding:.75rem .5rem; font-size:.88rem; font-weight:500; color:var(--text-secondary); cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; transition:color .2s,border-color .2s; }
+      .trips-tab.active { color:var(--btn-primary); border-bottom-color:var(--btn-primary); font-weight:600; }
+      /* empty state */
+      .empty-state { text-align:center; padding:4rem 2rem; color:var(--text-secondary); }
+      .empty-state .empty-icon { margin-bottom:1rem; color:#ccc; }
+      .empty-state h3 { color:var(--text-primary); margin-bottom:.5rem; }
+      @media (max-width:640px) { .trips-tab { font-size:.78rem; padding:.625rem .25rem; } }
+    </style>
+
+    <header class="mytrips-header">
+      <div class="container">
+        <h1>My Trips</h1>
+        <p id="mytrips-greeting">Your travel history and upcoming adventures</p>
+      </div>
+    </header>
+
+    <div class="container" style="max-width:860px;padding-bottom:4rem;">
+      <div class="trips-tabs" id="trips-tabs">
+        <button type="button" class="trips-tab active" data-filter="upcoming">Upcoming</button>
+        <button type="button" class="trips-tab" data-filter="past">Past</button>
+        <button type="button" class="trips-tab" data-filter="all">All Trips</button>
+      </div>
+
+      <div id="trips-list">
+        <div class="loading-state"><span class="spinner spinner-dark"></span> Loading your trips…</div>
+      </div>
+
+      <div style="text-align:center;margin-top:2.5rem;">
+        <button type="button" onclick="navigateTo('itinerary')" class="btn btn-primary" style="font-size:1rem;padding:.875rem 2rem;">
+          <i data-feather="plus" style="width:16px;height:16px;"></i>
+          Book a New Trip
+        </button>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section"><h3>Tripzy</h3><p>Your gateway to unforgettable travel experiences around the world.</p></div>
+          <div class="footer-section"><h3>Quick Links</h3><ul><li><a onclick="navigateTo('blog')">Destinations</a></li><li><a onclick="navigateTo('itinerary')">Plan Trip</a></li><li><a onclick="navigateTo('mytrips')">My Trips</a></li></ul></div>
+          <div class="footer-section"><h3>Support</h3><ul><li><a href="#">Help Center</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+          <div class="footer-section"><h3>Connect With Us</h3><div class="footer-social"><a href="#" class="social-icon"><i data-feather="facebook"></i></a><a href="#" class="social-icon"><i data-feather="instagram"></i></a><a href="#" class="social-icon"><i data-feather="twitter"></i></a></div></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2025 Tripzy. All rights reserved.</p></div>
+      </div>
+    </footer>
+  </div>
+
   <script src="script-merged.js"></script>
 </body>
 </html>

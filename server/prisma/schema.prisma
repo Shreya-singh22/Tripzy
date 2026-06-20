@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // Switch to "postgresql" and update DATABASE_URL to go live — no other change needed
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Enums stored as strings for SQLite compatibility.
+// Values: role = "USER"|"ADMIN", status = "CONFIRMED"|"CANCELLED", category = "TRAVEL"|"FOOD"|"ACTIVITY"
+// Swap provider to "postgresql" and you can promote these to real enums if desired.
+
+model User {
+  id           String               @id @default(cuid())
+  name         String
+  email        String               @unique
+  phone        String
+  pinCode      String               // Indian 6-digit postal PIN code — address data, not a credential
+  passwordHash String
+  role         String               @default("USER")
+  bookings     Booking[]
+  resetTokens  PasswordResetToken[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Destination {
+  id              String        @id @default(cuid())
+  slug            String        @unique  // "paris", "tokyo", etc.
+  name            String
+  country         String
+  description     String
+  bestTimeToVisit String        // JSON array stored as string for SQLite compat
+  topAttractions  String        // JSON array
+  travelTips      String        // JSON array
+  tags            String        // JSON array
+  images          String        // JSON array of paths relative to frontend root
+  basePrice       Int           // ₹ per person — authoritative server-side price
+  bookingItems    BookingItem[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model TripOption {
+  id           String         @id @default(cuid())
+  optionKey    String         @unique  // matches data-id in original HTML: "flight", "hotel", etc.
+  category     String         // "TRAVEL" | "FOOD" | "ACTIVITY"
+  title        String
+  subtitle     String
+  emoji        String
+  price        Int            // ₹
+  bookingItems BookingItem[]
+}
+
+model Booking {
+  id        String        @id @default(cuid())
+  reference String        @unique  // "TRP-A1B2C3D4"
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  status     String        @default("CONFIRMED")
+  total      Int           // ₹, computed server-side — never trusted from client
+  travelDate DateTime?     // optional; drives past vs upcoming classification
+  items      BookingItem[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model BookingItem {
+  id             String       @id @default(cuid())
+  bookingId      String
+  booking        Booking      @relation(fields: [bookingId], references: [id])
+  destinationId  String?
+  destination    Destination? @relation(fields: [destinationId], references: [id])
+  tripOptionId   String?
+  tripOption     TripOption?  @relation(fields: [tripOptionId], references: [id])
+  priceAtBooking Int          // snapshot — protects old bookings from repricing
+}
