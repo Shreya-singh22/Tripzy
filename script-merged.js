@@ -8,7 +8,7 @@
 // API LAYER
 // ══════════════════════════════════════════════════════════
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = 'https://tripzy-1-ga91.onrender.com/api';
 
 // In-memory auth state — cleared on hard refresh (refresh cookie restores session)
 let accessToken = null;
