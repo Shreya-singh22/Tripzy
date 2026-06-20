@@ -110,6 +110,43 @@
 </head>
 <body>
 
+  <!-- ── Sticky Navbar ── -->
+  <nav class="blog-nav" id="global-nav" style="display: none;">
+    <div class="container">
+      <div class="blog-nav-content">
+        <!-- Logo -->
+        <div class="nav-brand" onclick="navigateTo('blog')" role="button" tabindex="0" aria-label="Tripzy home">
+          <i data-feather="send"></i>
+          <span>Tripzy</span>
+        </div>
+        <!-- Destination links -->
+        <div class="blog-nav-links" id="blogNavLinks">
+          <a href="#paris"   class="blog-nav-link">Paris</a>
+          <a href="#tokyo"   class="blog-nav-link">Tokyo</a>
+          <a href="#rome"    class="blog-nav-link">Rome</a>
+          <a href="#newyork" class="blog-nav-link">New York</a>
+          <a href="#london"  class="blog-nav-link">London</a>
+        </div>
+        <!-- User controls + hamburger -->
+        <div id="nav-right" style="display:flex;align-items:center;gap:.75rem;flex-shrink:0;">
+          <span id="nav-user-name" style="font-size:.9rem;font-weight:500;color:var(--text-primary);white-space:nowrap;display:none;margin-right:0.25rem;"></span>
+          <button type="button" onclick="navigateTo('mytrips')" id="nav-mytrips-btn" class="nav-btn nav-btn-grey" style="display:none;">
+            <i data-feather="book-open" style="width:16px;height:16px;"></i> My Trips
+          </button>
+          <button type="button" onclick="navigateTo('itinerary')" id="nav-plan-trip-btn" class="nav-btn nav-btn-blue">
+            <i data-feather="calendar" style="width:16px;height:16px;"></i> Plan Trip
+          </button>
+          <button type="button" onclick="doLogout()" id="nav-logout-btn" title="Logout" style="display:none;background:#f1f5f9;color:var(--text-primary);border:none;padding:.5rem .625rem;border-radius:8px;cursor:pointer;display:flex;align-items:center;transition:background 0.2s;">
+            <i data-feather="log-out" style="width:16px;height:16px;"></i>
+          </button>
+          <button type="button" class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
   <!-- ══════════════════════════════════════════════════════════════
        PAGE 1: Auth (Register / Login)
   ══════════════════════════════════════════════════════════════ -->
@@ -488,43 +525,6 @@
       }
     </style>
 
-    <!-- ── Sticky Navbar ── -->
-    <nav class="blog-nav">
-      <div class="container">
-        <div class="blog-nav-content">
-          <!-- Logo -->
-          <div class="nav-brand" onclick="navigateTo('blog')" role="button" tabindex="0" aria-label="Tripzy home">
-            <i data-feather="send"></i>
-            <span>Tripzy</span>
-          </div>
-          <!-- Destination links -->
-          <div class="blog-nav-links" id="blogNavLinks">
-            <a href="#paris"   class="blog-nav-link">Paris</a>
-            <a href="#tokyo"   class="blog-nav-link">Tokyo</a>
-            <a href="#rome"    class="blog-nav-link">Rome</a>
-            <a href="#newyork" class="blog-nav-link">New York</a>
-            <a href="#london"  class="blog-nav-link">London</a>
-          </div>
-          <!-- User controls + hamburger -->
-          <div id="nav-right" style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
-            <span id="nav-user-name" style="font-size:.82rem;color:var(--text-secondary);white-space:nowrap;display:none;"></span>
-            <button type="button" onclick="navigateTo('mytrips')" id="nav-mytrips-btn" class="plan-trip-btn" style="display:none;">
-              <i data-feather="map" style="width:14px;height:14px;"></i> My Trips
-            </button>
-            <button type="button" onclick="navigateTo('itinerary')" class="plan-trip-btn">
-              <i data-feather="calendar" style="width:14px;height:14px;"></i> Plan Trip
-            </button>
-            <button type="button" onclick="doLogout()" id="nav-logout-btn" title="Logout" style="display:none;background:#f1f3f5;color:#555;border:none;padding:.5rem .625rem;border-radius:6px;cursor:pointer;display:flex;align-items:center;">
-              <i data-feather="log-out" style="width:15px;height:15px;"></i>
-            </button>
-            <button type="button" class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle menu">
-              <span></span><span></span><span></span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
-
     <!-- ── Hero ── -->
     <section class="blog-hero">
       <div class="blog-hero-content">
@@ -546,14 +546,30 @@
             Popular Destinations
           </div>
           <div class="popular-strip-links">
-            <a href="#paris"   class="popular-strip-link">Paris</a>
-            <a href="#tokyo"   class="popular-strip-link">Tokyo</a>
-            <a href="#rome"    class="popular-strip-link">Rome</a>
-            <a href="#newyork" class="popular-strip-link">New York</a>
-            <a href="#london"  class="popular-strip-link">London</a>
+            <a href="#paris" class="popular-strip-link">
+              <svg viewBox="0 0 64 64" width="16" height="16" style="fill: #e11d48;"><path d="M49.6 57.5c-1.2-4.5-3.8-13.8-6.1-22.3 3-.3 5.3-2.6 5.3-5.5 0-2.9-2.3-5.2-5.3-5.5-.4-1.6-.9-3.2-1.3-4.8 1.5-.3 2.6-1.6 2.6-3.2 0-1.6-1.1-2.9-2.6-3.2-.8-3.4-1.8-7.7-2.6-11.2.9-.3 1.6-1.2 1.6-2.2v-.8c0-1.4-1.1-2.5-2.5-2.5h-5.4c-1.4 0-2.5 1.1-2.5 2.5v.8c0 1 .7 1.9 1.6 2.2-.8 3.5-1.8 7.8-2.6 11.2-1.5.3-2.6 1.6-2.6 3.2 0 1.6 1.1 2.9 2.6 3.2-.4 1.6-.9 3.2-1.3 4.8-3 .3-5.3 2.6-5.3 5.5 0 2.9 2.3 5.2 5.3 5.5-2.3 8.5-4.9 17.8-6.1 22.3-2 .5-3.5 2.1-3.5 4.1 0 2.4 2 4.4 4.5 4.4h31c2.5 0 4.5-2 4.5-4.4 0-2-1.5-3.6-3.5-4.1zm-17.6-43h4v4h-4v-4zm-2.8 14.5c.7-2.7 1.5-5.5 2.2-8.2h5.2c.7 2.7 1.5 5.5 2.2 8.2h-9.6zm1.1 4.5h7.4c.5 1.8 1 3.7 1.5 5.5h-10.4c.5-1.8 1-3.7 1.5-5.5zm-5 18c.8-2.6 1.8-5.7 2.7-8.8H36c.9 3.1 1.9 6.2 2.7 8.8H25.3zM32 60c.6-6 2.8-18 4.2-24h-8.4c1.4 6 3.6 18 4.2 24z"/></svg>
+              Paris
+            </a>
+            <a href="#tokyo" class="popular-strip-link">
+              <svg viewBox="0 0 64 64" width="16" height="16" style="fill: #ea580c;"><path d="M58 14V8c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4.5c.3 4.5.8 12.3 1.3 18H10c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h4.7c.6 7.5 1.3 16 1.8 21.3.1 1.1 1 1.7 2 1.7h4c1.1 0 1.9-.9 1.8-2l-1.9-21h15.2l-1.9 21c-.1 1.1.7 2 1.8 2h4c1 0 1.9-.6 2-1.7.5-5.3 1.2-13.8 1.8-21.3H54c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2h-3.8c.5-5.7 1-13.5 1.3-18H56c1.1 0 2-.9 2-2zM21.2 32c-.3-4.5-.6-9.8-.8-16h23.2c-.2 6.2-.5 11.5-.8 16H21.2z"/></svg>
+              Tokyo
+            </a>
+            <a href="#rome" class="popular-strip-link">
+              <svg viewBox="0 0 64 64" width="16" height="16" style="fill: #d97706;"><path d="M58 38.6c0-9.2-11.6-16.6-26-16.6S6 29.4 6 38.6c0 5 3.5 9.5 9.2 12.5v7.4c0 1 .8 1.8 1.8 1.8h30c1 0 1.8-.8 1.8-1.8v-7.4c5.7-3 9.2-7.5 9.2-12.5zm-45.2 6.6c-2.2-1.8-3.6-4.1-3.6-6.6 0-3.3 2.4-6.3 6.7-8.2V41.3c-1.2 1.2-2.3 2.5-3.1 3.9zm13.2 7c-1.5-.6-3-1.4-4.2-2.3V31c2.4-.6 5-1 7.7-1.1v21.5c-1.2.2-2.4.4-3.5.6zm13-1.4c-1.5.1-3 .1-4.5 0V29.8c1.5-.1 3-.1 4.5 0v21zm13 1.4c-1.1-.2-2.2-.4-3.5-.6V29.9c2.7.2 5.3.6 7.7 1.1v19.4c-1.2.9-2.7 1.7-4.2 2.3zm5.7-8.4v-10.9c4.3 1.9 6.7 4.9 6.7 8.2 0 2.5-1.4 4.8-3.6 6.6-.8-1.4-1.9-2.7-3.1-3.9z"/></svg>
+              Rome
+            </a>
+            <a href="#newyork" class="popular-strip-link">
+              <svg viewBox="0 0 64 64" width="16" height="16" style="fill: #0d9488;"><path d="M32 4c.6 0 1 .4 1 1v4.2c2.5-1.5 5.5-1.5 8 0V5c0-.6.4-1 1-1s1 .4 1 1v5.2c1.7 1.7 2.8 4 3 6.6l3.4-3.4c.4-.4 1-.4 1.4 0s.4 1 0 1.4L44.4 22c.6 2.5.3 5.3-1 7.7l.6 15.3 6.8 5.4c.4.3.5.9.2 1.3-.3.4-.9.5-1.3.2L42.9 47 41.5 60c-.1.6-.6 1-1.2 1H23.7c-.6 0-1.1-.4-1.2-1l-1.4-13-6.8 4.9c-.4.3-1 .2-1.3-.2-.3-.4-.2-1 .2-1.3l6.8-5.4.6-15.3c-1.3-2.4-1.6-5.2-1-7.7L14.2 18.2c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l3.4 3.4c.2-2.6 1.3-4.9 3-6.6V5c0-.6.4-1 1-1s1 .4 1 1v4.2c2.5-1.5 5.5-1.5 8 0V5c0-.6.4-1 1-1zm-4.7 18.5c0 2.6 2.1 4.7 4.7 4.7s4.7-2.1 4.7-4.7S34.6 17.8 32 17.8s-4.7 2.1-4.7 4.7z"/></svg>
+              New York
+            </a>
+            <a href="#london" class="popular-strip-link">
+              <svg viewBox="0 0 64 64" width="16" height="16" style="fill: #854d0e;"><path d="M38 5v6h-12V5c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2zm-14 8v16h16V13H24zm5.5 5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5zM22 31v29c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V31H22z"/></svg>
+              London
+            </a>
           </div>
           <a class="explore-all-link" onclick="document.getElementById('destinations-container').scrollIntoView({behavior:'smooth'})">
-            Explore All Destinations &rarr;
+            Explore All Destinations
+            <i data-feather="arrow-right" style="width: 14px; height: 14px;"></i>
           </a>
         </div>
       </div>
@@ -623,17 +639,6 @@
        PAGE 3: Itinerary
   ══════════════════════════════════════════════════════════════ -->
   <div id="page-itinerary" class="page">
-    <style>
-      .itinerary-header { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:3rem 0; text-align:center; margin-bottom:3rem; }
-      .itinerary-header h1 { font-size:2.5rem; margin-bottom:.5rem; color:#fff; }
-      .itinerary-header p  { font-size:1.1rem; color:rgba(255,255,255,.95); }
-      .itinerary-container { display:grid; grid-template-columns:1fr 400px; gap:2rem; margin-bottom:3rem; }
-      .itinerary-options { display:flex; flex-direction:column; gap:2rem; }
-      .option-category { background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius); padding:2rem; }
-      .category-title { font-size:1.75rem; color:var(--text-primary); margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:2px solid var(--btn-primary); display:flex; align-items:center; gap:.75rem; }
-      .category-icon { width:32px; height:32px; color:var(--btn-primary); }
-      @media (max-width:992px) { .itinerary-container { grid-template-columns:1fr; } .price-summary { position:static; } }
-    </style>
 
     <div class="page-wrapper">
       <header class="itinerary-header">
@@ -652,9 +657,10 @@
                 <i data-feather="map-pin" class="category-icon"></i>
                 Select Your Destinations
               </h2>
-              <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:1.5rem;line-height:1.6;">
-                <strong>Note:</strong> Destination fees cover entry visas, travel insurance, local transportation passes, and government tourism taxes.
-              </p>
+              <div class="info-note-banner">
+                <i data-feather="info"></i>
+                <span><strong>Note:</strong> Destination fees cover entry visas, travel insurance, local transportation passes, and government tourism taxes.</span>
+              </div>
               <div id="dest-checkbox-list" class="checkbox-list">
                 <div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div>
               </div>
@@ -697,21 +703,29 @@
           <!-- Price Summary Sidebar -->
           <div>
             <div class="price-summary">
-              <h3 style="margin-bottom:1.5rem;color:var(--text-primary);font-size:1.5rem;">Trip Summary</h3>
+              <h3 style="margin-bottom:1.5rem;color:var(--text-primary);font-size:1.5rem;display:flex;align-items:center;gap:0.75rem;">
+                <i data-feather="briefcase" style="width:24px;height:24px;color:var(--text-secondary);"></i>
+                Trip Summary
+              </h3>
               <div id="selectedItems">
                 <p style="text-align:center;color:var(--text-secondary);padding:2rem 0;">
                   <i data-feather="info" style="width:24px;height:24px;margin-bottom:.5rem;"></i><br>
                   No items selected yet
                 </p>
               </div>
-              <div class="price-row" style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid var(--btn-primary);">
-                <span class="price-label" style="font-size:1.25rem;font-weight:600;">Total Amount</span>
-                <span class="total-price" id="totalPrice">₹0</span>
+              <div class="summary-divider"></div>
+              <div class="summary-total-section">
+                <span class="summary-total-label">Total Amount</span>
+                <span class="summary-total-price" id="totalPrice">₹0</span>
               </div>
-              <button id="confirmTripBtn" class="btn btn-primary btn-block mt-4">
-                <i data-feather="check-circle" style="width:18px;height:18px;"></i>
+              <button id="confirmTripBtn" class="btn btn-primary btn-block mt-4" style="border-radius: var(--radius-sm); font-size:1.05rem;">
                 Confirm Trip
+                <i data-feather="chevron-right" style="width:18px;height:18px;"></i>
               </button>
+              <div class="secure-booking-badge">
+                <i data-feather="lock"></i>
+                <span>Secure & Safe Booking</span>
+              </div>
             </div>
           </div>
         </div>
@@ -735,41 +749,58 @@
        PAGE 4: Confirmation
   ══════════════════════════════════════════════════════════════ -->
   <div id="page-confirmation" class="page">
-    <div class="page-wrapper">
-      <div class="container">
-        <div class="confirmation-hero">
-          <div class="confirmation-icon"><i data-feather="check-circle"></i></div>
+    <div class="page-wrapper" style="background: var(--bg-primary);">
+      <!-- Hero banner overlaying sunset image -->
+      <div class="confirmation-banner-outer">
+        <div class="confirmation-card-white">
+          <div class="confirmation-success-badge">
+            <i data-feather="check"></i>
+          </div>
           <h1>Your Journey with Tripzy is Confirmed!</h1>
-          <p style="font-size:1.1rem;margin-top:1rem;">Get ready for an unforgettable adventure. Your travel dreams are about to come true!</p>
-          <p style="margin-top:.5rem;font-size:.95rem;opacity:.9;">Booking Ref: <strong id="bookingRef">—</strong></p>
-        </div>
-
-        <div class="summary-card">
-          <h2 class="summary-header">Your Information</h2>
-          <div class="summary-item">
-            <span class="summary-label">Name</span>
-            <span class="summary-value" id="confUserName">—</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-label">Email</span>
-            <span class="summary-value" id="confUserEmail">—</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-label">Phone</span>
-            <span class="summary-value" id="confUserPhone">—</span>
-          </div>
-          <div class="summary-item">
-            <span class="summary-label">Booking Date</span>
-            <span class="summary-value" id="bookingDate">—</span>
+          <p>Get ready for an unforgettable adventure. Your travel dreams are about to come true!</p>
+          <div class="confirmation-booking-ref-text">
+            Booking Ref: <strong id="bookingRef">—</strong>
           </div>
         </div>
+      </div>
 
-        <div class="summary-card">
-          <h2 class="summary-header">Trip Details</h2>
+      <div class="container" style="max-width: 650px; margin-top: 7rem;">
+        <!-- Your Information -->
+        <div class="summary-card" style="padding: 2.25rem 2rem;">
+          <h2 class="summary-header" style="display:flex;align-items:center;gap:0.5rem;font-size:1.3rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom: 2px solid var(--border-color);">
+            <i data-feather="user" style="width:20px;height:20px;color:var(--text-secondary);"></i>
+            Your Information
+          </h2>
+          <div class="info-table">
+            <div class="info-row">
+              <span class="info-label">Name</span>
+              <span class="info-value" id="confUserName">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Email</span>
+              <span class="info-value" id="confUserEmail">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Phone</span>
+              <span class="info-value" id="confUserPhone">—</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Booking Date</span>
+              <span class="info-value" id="bookingDate">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trip Details -->
+        <div class="summary-card" style="padding: 2.25rem 2rem; margin-top: 2rem;">
+          <h2 class="summary-header" style="display:flex;align-items:center;gap:0.5rem;font-size:1.3rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom: 2px solid var(--border-color);">
+            <i data-feather="briefcase" style="width:20px;height:20px;color:var(--text-secondary);"></i>
+            Trip Details
+          </h2>
           <div id="tripItems"><div class="loading-state"><span class="spinner spinner-dark"></span> Loading…</div></div>
-          <div class="summary-item" style="margin-top:1.5rem;padding-top:1.5rem;border-top:2px solid var(--btn-primary);">
-            <span class="summary-label" style="font-size:1.25rem;font-weight:600;">Total Amount</span>
-            <span class="summary-value" style="font-size:1.5rem;color:var(--btn-primary);font-weight:700;" id="totalAmount">₹0</span>
+          <div class="summary-item" style="margin-top:1.5rem;padding-top:1.5rem;border-top:2px solid var(--border-color);border-bottom:none;">
+            <span class="summary-label" style="font-size:1.15rem;font-weight:700;color:var(--text-primary);">Total Amount</span>
+            <span class="summary-value" style="font-size:1.5rem;color:var(--success-color);font-weight:800;" id="totalAmount">₹0</span>
           </div>
         </div>
 
@@ -821,21 +852,6 @@
        PAGE 5: My Trips
   ══════════════════════════════════════════════════════════════ -->
   <div id="page-mytrips" class="page">
-    <style>
-      /* page header */
-      .mytrips-header { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); padding:3rem 0; text-align:center; margin-bottom:2rem; }
-      .mytrips-header h1 { font-size:2.5rem; color:#fff; margin-bottom:.5rem; }
-      .mytrips-header p  { color:rgba(255,255,255,.9); font-size:1.05rem; }
-      /* tabs — shared with blog "Your Trips" section */
-      .trips-tabs { display:flex; border-bottom:2px solid var(--border-color); margin-bottom:1.5rem; }
-      .trips-tab  { flex:1; background:none; border:none; padding:.75rem .5rem; font-size:.88rem; font-weight:500; color:var(--text-secondary); cursor:pointer; border-bottom:3px solid transparent; margin-bottom:-2px; transition:color .2s,border-color .2s; }
-      .trips-tab.active { color:var(--btn-primary); border-bottom-color:var(--btn-primary); font-weight:600; }
-      /* empty state */
-      .empty-state { text-align:center; padding:4rem 2rem; color:var(--text-secondary); }
-      .empty-state .empty-icon { margin-bottom:1rem; color:#ccc; }
-      .empty-state h3 { color:var(--text-primary); margin-bottom:.5rem; }
-      @media (max-width:640px) { .trips-tab { font-size:.78rem; padding:.625rem .25rem; } }
-    </style>
 
     <header class="mytrips-header">
       <div class="container">

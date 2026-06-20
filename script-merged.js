@@ -19,6 +19,15 @@ let lastBookingRef = null;
 let cachedDestinations = null;
 let cachedTripOptions = null;
 
+// Landmark vector graphics mapping
+const LANDMARK_SVGs = {
+  paris: `<svg viewBox="0 0 64 64" width="48" height="48" class="monument-svg" style="fill: #e11d48;"><path d="M49.6 57.5c-1.2-4.5-3.8-13.8-6.1-22.3 3-.3 5.3-2.6 5.3-5.5 0-2.9-2.3-5.2-5.3-5.5-.4-1.6-.9-3.2-1.3-4.8 1.5-.3 2.6-1.6 2.6-3.2 0-1.6-1.1-2.9-2.6-3.2-.8-3.4-1.8-7.7-2.6-11.2.9-.3 1.6-1.2 1.6-2.2v-.8c0-1.4-1.1-2.5-2.5-2.5h-5.4c-1.4 0-2.5 1.1-2.5 2.5v.8c0 1 .7 1.9 1.6 2.2-.8 3.5-1.8 7.8-2.6 11.2-1.5.3-2.6 1.6-2.6 3.2 0 1.6 1.1 2.9 2.6 3.2-.4 1.6-.9 3.2-1.3 4.8-3 .3-5.3 2.6-5.3 5.5 0 2.9 2.3 5.2 5.3 5.5-2.3 8.5-4.9 17.8-6.1 22.3-2 .5-3.5 2.1-3.5 4.1 0 2.4 2 4.4 4.5 4.4h31c2.5 0 4.5-2 4.5-4.4 0-2-1.5-3.6-3.5-4.1zm-17.6-43h4v4h-4v-4zm-2.8 14.5c.7-2.7 1.5-5.5 2.2-8.2h5.2c.7 2.7 1.5 5.5 2.2 8.2h-9.6zm1.1 4.5h7.4c.5 1.8 1 3.7 1.5 5.5h-10.4c.5-1.8 1-3.7 1.5-5.5zm-5 18c.8-2.6 1.8-5.7 2.7-8.8H36c.9 3.1 1.9 6.2 2.7 8.8H25.3zM32 60c.6-6 2.8-18 4.2-24h-8.4c1.4 6 3.6 18 4.2 24z"/></svg>`,
+  tokyo: `<svg viewBox="0 0 64 64" width="48" height="48" class="monument-svg" style="fill: #ea580c;"><path d="M58 14V8c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h4.5c.3 4.5.8 12.3 1.3 18H10c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h4.7c.6 7.5 1.3 16 1.8 21.3.1 1.1 1 1.7 2 1.7h4c1.1 0 1.9-.9 1.8-2l-1.9-21h15.2l-1.9 21c-.1 1.1.7 2 1.8 2h4c1 0 1.9-.6 2-1.7.5-5.3 1.2-13.8 1.8-21.3H54c1.1 0 2-.9 2-2v-2c0-1.1-.9-2-2-2h-3.8c.5-5.7 1-13.5 1.3-18H56c1.1 0 2-.9 2-2zM21.2 32c-.3-4.5-.6-9.8-.8-16h23.2c-.2 6.2-.5 11.5-.8 16H21.2z"/></svg>`,
+  rome: `<svg viewBox="0 0 64 64" width="48" height="48" class="monument-svg" style="fill: #d97706;"><path d="M58 38.6c0-9.2-11.6-16.6-26-16.6S6 29.4 6 38.6c0 5 3.5 9.5 9.2 12.5v7.4c0 1 .8 1.8 1.8 1.8h30c1 0 1.8-.8 1.8-1.8v-7.4c5.7-3 9.2-7.5 9.2-12.5zm-45.2 6.6c-2.2-1.8-3.6-4.1-3.6-6.6 0-3.3 2.4-6.3 6.7-8.2V41.3c-1.2 1.2-2.3 2.5-3.1 3.9zm13.2 7c-1.5-.6-3-1.4-4.2-2.3V31c2.4-.6 5-1 7.7-1.1v21.5c-1.2.2-2.4.4-3.5.6zm13-1.4c-1.5.1-3 .1-4.5 0V29.8c1.5-.1 3-.1 4.5 0v21zm13 1.4c-1.1-.2-2.2-.4-3.5-.6V29.9c2.7.2 5.3.6 7.7 1.1v19.4c-1.2.9-2.7 1.7-4.2 2.3zm5.7-8.4v-10.9c4.3 1.9 6.7 4.9 6.7 8.2 0 2.5-1.4 4.8-3.6 6.6-.8-1.4-1.9-2.7-3.1-3.9z"/></svg>`,
+  newyork: `<svg viewBox="0 0 64 64" width="48" height="48" class="monument-svg" style="fill: #0d9488;"><path d="M32 4c.6 0 1 .4 1 1v4.2c2.5-1.5 5.5-1.5 8 0V5c0-.6.4-1 1-1s1 .4 1 1v5.2c1.7 1.7 2.8 4 3 6.6l3.4-3.4c.4-.4 1-.4 1.4 0s.4 1 0 1.4L44.4 22c.6 2.5.3 5.3-1 7.7l.6 15.3 6.8 5.4c.4.3.5.9.2 1.3-.3.4-.9.5-1.3.2L42.9 47 41.5 60c-.1.6-.6 1-1.2 1H23.7c-.6 0-1.1-.4-1.2-1l-1.4-13-6.8 4.9c-.4.3-1 .2-1.3-.2-.3-.4-.2-1 .2-1.3l6.8-5.4.6-15.3c-1.3-2.4-1.6-5.2-1-7.7L14.2 18.2c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l3.4 3.4c.2-2.6 1.3-4.9 3-6.6V5c0-.6.4-1 1-1s1 .4 1 1v4.2c2.5-1.5 5.5-1.5 8 0V5c0-.6.4-1 1-1zm-4.7 18.5c0 2.6 2.1 4.7 4.7 4.7s4.7-2.1 4.7-4.7S34.6 17.8 32 17.8s-4.7 2.1-4.7 4.7z"/></svg>`,
+  london: `<svg viewBox="0 0 64 64" width="48" height="48" class="monument-svg" style="fill: #854d0e;"><path d="M38 5v6h-12V5c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2zm-14 8v16h16V13H24zm5.5 5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5-2.5-1.1-2.5-2.5zM22 31v29c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V31H22z"/></svg>`,
+};
+
 async function apiFetch(path, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
@@ -99,6 +108,32 @@ function navigateTo(pageName) {
   if (pageName === 'registration' && currentUser) {
     navigateTo('blog');
     return;
+  }
+
+  const globalNav = document.getElementById('global-nav');
+  if (globalNav) {
+    globalNav.style.display = pageName === 'registration' ? 'none' : 'block';
+  }
+
+  // Update navbar link active styling
+  document.querySelectorAll('.blog-nav-link').forEach((link) => {
+    link.classList.remove('active-page');
+  });
+
+  // Update button active states
+  const myTripsBtn = document.getElementById('nav-mytrips-btn');
+  const planTripBtn = document.getElementById('nav-plan-trip-btn');
+  if (myTripsBtn && planTripBtn) {
+    if (pageName === 'mytrips') {
+      myTripsBtn.className = 'nav-btn nav-btn-blue';
+      planTripBtn.className = 'nav-btn nav-btn-outline';
+    } else if (pageName === 'itinerary') {
+      planTripBtn.className = 'nav-btn nav-btn-blue';
+      myTripsBtn.className = 'nav-btn nav-btn-grey';
+    } else {
+      planTripBtn.className = 'nav-btn nav-btn-blue';
+      myTripsBtn.className = 'nav-btn nav-btn-grey';
+    }
   }
 
   document.querySelectorAll('.page').forEach((p) => p.classList.remove('active'));
@@ -855,19 +890,26 @@ function renderDestinationCheckboxes(destinations) {
   const container = document.getElementById('dest-checkbox-list');
   if (!container) return;
 
-  container.innerHTML = destinations.map((d) => `
-    <label class="checkbox-item" for="dest-${escHtml(d.slug)}">
-      <input type="checkbox"
-             id="dest-${escHtml(d.slug)}"
-             data-db-id="${escHtml(d.id)}"
-             data-type="destination"
-             data-price="${d.basePrice}">
-      <div class="checkbox-content">
-        <div class="checkbox-title">${escHtml(d.name)}, ${escHtml(d.country)}</div>
-        <div class="checkbox-subtitle">${escHtml(d.description.slice(0, 70))}…</div>
-      </div>
-      <div class="checkbox-price">${formatCurrency(d.basePrice)}</div>
-    </label>`).join('');
+  container.innerHTML = destinations.map((d) => {
+    const svgHTML = LANDMARK_SVGs[d.slug] || '';
+    return `
+      <label class="checkbox-item" for="dest-${escHtml(d.slug)}">
+        <input type="checkbox"
+               id="dest-${escHtml(d.slug)}"
+               data-db-id="${escHtml(d.id)}"
+               data-type="destination"
+               data-slug="${escHtml(d.slug)}"
+               data-price="${d.basePrice}">
+        <div class="checkbox-destination-icon">
+          ${svgHTML}
+        </div>
+        <div class="checkbox-content">
+          <div class="checkbox-title">${escHtml(d.name)}, ${escHtml(d.country)}</div>
+          <div class="checkbox-subtitle">${escHtml(d.description.slice(0, 95))}…</div>
+        </div>
+        <div class="checkbox-price">${formatCurrency(d.basePrice)}</div>
+      </label>`;
+  }).join('');
 }
 
 function renderOptionCheckboxes(options, category, containerId) {
@@ -965,30 +1007,44 @@ function updateItinerarySummary(summaryEl, totalEl) {
     total += price;
     const label = cb.closest('label');
     const title = label?.querySelector('.checkbox-title')?.textContent || cb.id;
-    if (cb.dataset.type === 'destination') dests.push({ title, price });
-    else others.push({ title, price });
+    if (cb.dataset.type === 'destination') {
+      dests.push({ title, price, slug: cb.dataset.slug });
+    } else {
+      others.push({ title, price });
+    }
   });
 
-  let html = '<div style="display:flex;flex-direction:column;gap:.75rem;">';
+  let html = '<div class="summary-items-list">';
 
   if (dests.length) {
-    html += `<div style="margin-bottom:.75rem;padding-bottom:.75rem;border-bottom:2px solid var(--btn-primary);">
-      <div style="font-weight:600;color:var(--btn-primary);margin-bottom:.75rem;font-size:.9rem;">DESTINATIONS (Visa, Insurance &amp; Taxes)</div>`;
+    html += `<div>
+      <div class="summary-section-title">DESTINATIONS (Visa, Insurance &amp; Taxes)</div>`;
     dests.forEach((d) => {
-      html += `<div class="price-row" style="margin-bottom:0;padding-bottom:.5rem;">
-        <span class="price-label" style="font-size:.9rem;">${escHtml(d.title)}</span>
-        <span class="price-value" style="font-size:.9rem;">${formatCurrency(d.price)}</span>
+      const svgHTML = LANDMARK_SVGs[d.slug] || '';
+      html += `<div class="summary-item-row" style="padding-bottom:.5rem;">
+        <span class="summary-item-row-dest">
+          <span style="width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;opacity:0.85;">
+            ${svgHTML}
+          </span>
+          <span style="font-weight:500;">${escHtml(d.title)}</span>
+        </span>
+        <span style="font-weight:700;">${formatCurrency(d.price)}</span>
       </div>`;
     });
     html += '</div>';
   }
 
-  others.forEach((o) => {
-    html += `<div class="price-row" style="margin-bottom:0;padding-bottom:.75rem;">
-      <span class="price-label" style="font-size:.95rem;">${escHtml(o.title)}</span>
-      <span class="price-value">${formatCurrency(o.price)}</span>
-    </div>`;
-  });
+  if (others.length) {
+    if (dests.length) html += '<div class="summary-divider" style="margin: 0.5rem 0;"></div>';
+    html += '<div>';
+    others.forEach((o) => {
+      html += `<div class="summary-item-row" style="padding-bottom:.5rem;">
+        <span style="color:var(--text-secondary);font-weight:500;">${escHtml(o.title)}</span>
+        <span style="font-weight:700;">${formatCurrency(o.price)}</span>
+      </div>`;
+    });
+    html += '</div>';
+  }
 
   html += '</div>';
   summaryEl.innerHTML = html;
@@ -999,16 +1055,14 @@ function animateCheckboxItem(cb) {
   const item = cb.closest('.checkbox-item');
   if (!item) return;
   if (cb.checked) {
-    item.style.borderColor = 'var(--btn-primary)';
-    item.style.background  = '#e7f3ff';
+    item.classList.add('checked');
     const priceEl = item.querySelector('.checkbox-price');
     if (priceEl) {
       priceEl.style.transform = 'scale(1.1)';
       setTimeout(() => { priceEl.style.transform = 'scale(1)'; }, 200);
     }
   } else {
-    item.style.borderColor = 'var(--border-color)';
-    item.style.background  = 'var(--bg-card)';
+    item.classList.remove('checked');
   }
 }
 
@@ -1161,19 +1215,54 @@ async function initConfirmationPage() {
     const items = booking.items || [];
     if (items.length > 0) {
       tripItems.innerHTML = items.map((item, i) => {
-        const label = item.destination
-          ? `${item.destination.name}, ${item.destination.country}`
-          : item.tripOption
-            ? item.tripOption.title
-            : 'Unknown item';
-        return `
-          <div class="summary-item" style="animation:slideUp .5s ease forwards;animation-delay:${i * 0.1}s;opacity:0;">
-            <span class="summary-label">${escHtml(label)}</span>
-            <span class="summary-value">${formatCurrency(item.priceAtBooking)}</span>
-          </div>`;
+        if (item.destination) {
+          let imgPath = 'assets/placeholder.png'; // fallback placeholder
+          if (item.destination.images) {
+            try {
+              const imgs = JSON.parse(item.destination.images);
+              if (Array.isArray(imgs) && imgs.length) imgPath = imgs[0];
+            } catch (_) {}
+          }
+          
+          const travelDateStr = booking.travelDate
+            ? new Date(booking.travelDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+            : 'Date not set';
+          const bookedDateStr = new Date(booking.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+          
+          return `
+            <div class="summary-detail-row" style="animation:slideUp .5s ease forwards;animation-delay:${i * 0.1}s;opacity:0;">
+              <img src="${escHtml(imgPath)}" alt="${escHtml(item.destination.name)}" class="summary-detail-thumb">
+              <div class="summary-detail-info">
+                <div class="summary-detail-title">${escHtml(item.destination.name)}, ${escHtml(item.destination.country)}</div>
+                <div class="summary-detail-meta">Travel: ${travelDateStr} &bull; Booked: ${bookedDateStr}</div>
+              </div>
+              <div class="summary-detail-price">${formatCurrency(item.priceAtBooking)}</div>
+            </div>`;
+        } else if (item.tripOption) {
+          const emoji = item.tripOption.emoji || '✨';
+          return `
+            <div class="summary-detail-row" style="animation:slideUp .5s ease forwards;animation-delay:${i * 0.1}s;opacity:0;">
+              <div class="summary-detail-thumb-placeholder">
+                <span style="font-size: 1.5rem;">${emoji}</span>
+              </div>
+              <div class="summary-detail-info">
+                <div class="summary-detail-title">${escHtml(item.tripOption.title)}</div>
+                <div class="summary-detail-meta">Option Package</div>
+              </div>
+              <div class="summary-detail-price">${formatCurrency(item.priceAtBooking)}</div>
+            </div>`;
+        } else {
+          return `
+            <div class="summary-detail-row" style="animation:slideUp .5s ease forwards;animation-delay:${i * 0.1}s;opacity:0;">
+              <div class="summary-detail-info">
+                <div class="summary-detail-title">Unknown Item</div>
+              </div>
+              <div class="summary-detail-price">${formatCurrency(item.priceAtBooking)}</div>
+            </div>`;
+        }
       }).join('');
     } else {
-      tripItems.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">No items found</p>';
+      tripItems.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding: 2rem 0;">No items found</p>';
     }
 
     totalAmountEl.textContent = formatCurrency(booking.total);
@@ -1473,7 +1562,7 @@ function buildTripCard(booking, now) {
   else if (destNames.length === 2) title = `${destNames[0]} to ${destNames[1]}`;
   else if (destNames.length >= 3)  title = `${destNames[0]} to ${destNames[1]} (+${destNames.length - 2} more)`;
 
-  // Thumbnail: first image of first destination (images is a JSON string from the DB)
+  // Thumbnail: first image of first destination
   let thumbnail = null;
   if (dests.length > 0 && dests[0].destination.images) {
     try {
@@ -1508,31 +1597,48 @@ function buildTripCard(booking, now) {
     <div class="trip-card">
       ${thumbHTML}
       <div class="trip-card-body">
-        <div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
           <span class="trip-ref">${escHtml(booking.reference)}</span>
           ${statusBadge}
           ${timeBadge}
         </div>
         <h3 class="trip-title">${escHtml(title)}</h3>
         <div class="trip-meta">
-          <span><i data-feather="calendar" style="width:12px;height:12px;"></i> Travel: ${travelDateStr}</span>
-          <span><i data-feather="clock" style="width:12px;height:12px;"></i> Booked: ${bookedDateStr}</span>
+          <span><i data-feather="calendar"></i> Travel: ${travelDateStr}</span>
+          <span><i data-feather="clock"></i> Booked: ${bookedDateStr}</span>
         </div>
         ${optNames ? `<div class="trip-options-row">${optNames}</div>` : ''}
       </div>
       <div class="trip-card-actions">
         <span class="trip-total">${formatCurrency(booking.total)}</span>
         <button type="button" class="view-details-btn" onclick="viewBookingDetails('${escHtml(booking.reference)}')">
-          View Details &rarr;
+          View Details
+          <i data-feather="arrow-right" style="width:14px;height:14px;margin-left:0.25rem;"></i>
         </button>
       </div>
     </div>`;
 }
 
-// ══════════════════════════════════════════════════════════
-// BOOTSTRAP
-// ══════════════════════════════════════════════════════════
+function setupNavScrollListeners() {
+  document.querySelectorAll('.blog-nav-link, .popular-strip-link').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        const id = href.slice(1);
+        if (currentPage !== 'blog') {
+          e.preventDefault();
+          navigateTo('blog');
+          setTimeout(() => {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
+      }
+    });
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof feather !== 'undefined') feather.replace();
+  setupNavScrollListeners();
 });
